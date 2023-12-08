@@ -1,17 +1,16 @@
 import React from "react";
 import styled from "styled-components";
-import { AiFillClockCircle } from "react-icons/ai";
-import Cards from './Cards';
+import Cards from '../components/Cards';
 
-export default function Body({ headerBackground }) {
+const Body = () => {
   return (
-    <Container headerBackground={headerBackground}>
+    <Container>
         <>
          <Cards />
         </>
     </Container>
   );
-}
+};
 
 const Container = styled.div`
   .playlist {
@@ -82,3 +81,5 @@ const Container = styled.div`
     }
   }
 `;
+
+export default Body;

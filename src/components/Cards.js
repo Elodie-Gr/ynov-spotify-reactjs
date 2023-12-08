@@ -3,14 +3,17 @@ import styled from "styled-components";
 import {
     BsFillPlayCircleFill,
   } from "react-icons/bs";
+import { Link } from "react-router-dom";
 
-export default function Cards() {
+const Cards = () => {
+
     return (
             <>
               {/* Section 1 */}
               <CardsWrap>
-                <h1>Titres likés</h1>
+                <h1>Derniers sons</h1>
                 <InlineCards>
+                    <StyledLink to="/playlists">
                   <Card>
                     <CardImg>
                       <img
@@ -18,7 +21,7 @@ export default function Cards() {
                         alt="Sons Likés"
                       />
                       <Button className="card__play_button">
-                       <BsFillPlayCircleFill size={60}/>
+                       <BsFillPlayCircleFill size={60} color="green" />
                       </Button>
                     </CardImg>
         
@@ -26,6 +29,8 @@ export default function Cards() {
                       <h3>Sons likées</h3>
                     </CardContent>
                   </Card>
+                  </StyledLink>
+                  <StyledLink to="/playlists">
                   <Card>
                     <CardImg>
                       <img
@@ -33,7 +38,7 @@ export default function Cards() {
                         alt="Sons Likés"
                       />
                       <Button className="card__play_button">
-                       <BsFillPlayCircleFill size={60} />
+                       <BsFillPlayCircleFill size={60} color="green"/>
                       </Button>
                     </CardImg>
         
@@ -41,6 +46,8 @@ export default function Cards() {
                       <h3>Sons Likés</h3>
                     </CardContent>
                   </Card>
+                  </StyledLink>
+                  <StyledLink to="/playlists">
                   <Card>
                     <CardImg>
                       <img
@@ -48,7 +55,7 @@ export default function Cards() {
                         alt="Sons Likés"
                       />
                       <Button className="card__play_button">
-                       <BsFillPlayCircleFill size={60} />
+                       <BsFillPlayCircleFill size={60} color="green"/>
                       </Button>
                     </CardImg>
         
@@ -56,6 +63,8 @@ export default function Cards() {
                       <h3>Sons Likés</h3>
                     </CardContent>
                   </Card>
+                  </StyledLink>
+                  <StyledLink to="/playlists">
                   <Card>
                     <CardImg>
                       <img
@@ -63,7 +72,7 @@ export default function Cards() {
                         alt="Sons Likés"
                       />
                       <Button className="card__play_button">
-                       <BsFillPlayCircleFill size={60} />
+                       <BsFillPlayCircleFill size={60} color="green"/>
                       </Button>
                     </CardImg>
         
@@ -71,6 +80,8 @@ export default function Cards() {
                       <h3>Sons Likés</h3>
                     </CardContent>
                   </Card>
+                  </StyledLink>
+                  <StyledLink to="/playlists">
                   <Card>
                     <CardImg>
                       <img
@@ -78,7 +89,7 @@ export default function Cards() {
                         alt="Focus"
                       />
                       <Button className="card__play_button">
-                        <BsFillPlayCircleFill size={60} />
+                        <BsFillPlayCircleFill size={60} color="green"/>
                       </Button>
                     </CardImg>
         
@@ -86,13 +97,15 @@ export default function Cards() {
                       <h3>Sons Likés</h3>
                     </CardContent>
                   </Card>
+                  </StyledLink>
                 </InlineCards>
               </CardsWrap>
               {/* Section 2 */}
               <CardsWrap>
-                <h1>Top tendances</h1>
+                <h1>Artistes</h1>
                 <InlineCards>
                   {/* Card 1 */}
+                  <StyledLink to="/playlists">
                   <Card>
                     <CardImg>
                       <img
@@ -100,7 +113,7 @@ export default function Cards() {
                         alt="Regional BR"
                       />
                       <Button className="card__play_button">
-                        <BsFillPlayCircleFill size={60} />
+                        <BsFillPlayCircleFill size={60} color="green"/>
                       </Button>
                     </CardImg>
         
@@ -111,7 +124,9 @@ export default function Cards() {
                       </span>
                     </CardContent>
                   </Card>
+                  </StyledLink>
                   {/* Card 2 */}
+                  <StyledLink to="/playlists">
                   <Card>
                     <CardImg>
                       <img
@@ -119,7 +134,7 @@ export default function Cards() {
                         alt="Regional BR"
                       />
                       <Button className="card__play_button">
-                        <BsFillPlayCircleFill size={60} />
+                        <BsFillPlayCircleFill size={60} color="green"/>
                       </Button>
                     </CardImg>
         
@@ -130,7 +145,9 @@ export default function Cards() {
                       </span>
                     </CardContent>
                   </Card>
+                  </StyledLink>
                   {/* Card 3 */}
+                  <StyledLink to="/playlists">
                   <Card>
                     <CardImg>
                       <img
@@ -138,7 +155,7 @@ export default function Cards() {
                         alt="Regional FR"
                       />
                       <Button className="card__play_button">
-                        <BsFillPlayCircleFill size={60} />
+                        <BsFillPlayCircleFill size={60} color="green"/>
                       </Button>
                     </CardImg>
         
@@ -149,6 +166,8 @@ export default function Cards() {
                       </span>
                     </CardContent>
                   </Card>
+                  </StyledLink>
+                  <StyledLink to="/playlists">
                   {/* Card 4 */}
                   <Card>
                     <CardImg>
@@ -157,7 +176,7 @@ export default function Cards() {
                         alt="Regional FR"
                       />
                       <Button className="card__play_button">
-                        <BsFillPlayCircleFill size={60} />
+                        <BsFillPlayCircleFill size={60} color="green"/>
                       </Button>
                     </CardImg>
         
@@ -168,6 +187,8 @@ export default function Cards() {
                       </span>
                     </CardContent>
                   </Card>
+                  </StyledLink>
+                  <StyledLink to="/playlists">
                   {/* Card 5 */}
                   <Card>
                     <CardImg>
@@ -176,7 +197,7 @@ export default function Cards() {
                         alt="Regional FR"
                       />
                       <Button className="card__play_button">
-                        <BsFillPlayCircleFill size={60} />
+                        <BsFillPlayCircleFill size={60} color="green"/>
                       </Button>
                     </CardImg>
         
@@ -187,13 +208,14 @@ export default function Cards() {
                       </span>
                     </CardContent>
                   </Card>
+                  </StyledLink>
                 </InlineCards>
               </CardsWrap>
               {/* Section 3 */}
       <CardsWrap>
-        <h1>Focus</h1>
-        <p>Musique pour vous aider à la concentration</p>
+        <h1>Albums</h1>
         <InlineCards>
+        <StyledLink to="/playlists">
           <Card>
             <CardImg>
               <img
@@ -201,15 +223,17 @@ export default function Cards() {
                 alt="Focus"
               />
               <Button className="card__play_button">
-                <BsFillPlayCircleFill size={60} />
+                <BsFillPlayCircleFill size={60} color="green"/>
               </Button>
             </CardImg>
 
             <CardContent>
-              <h3>Télétravail</h3>
-              <span>Une sélection de hits pour vous accompagner en télétravail.</span>
+              <h3>NI</h3>
+              <span>Ninho</span>
             </CardContent>
           </Card>
+          </StyledLink>
+          <StyledLink to="/playlists">
           <Card>
             <CardImg>
               <img
@@ -217,15 +241,17 @@ export default function Cards() {
                 alt="Focus"
               />
               <Button className="card__play_button">
-                <BsFillPlayCircleFill size={60} />
+                <BsFillPlayCircleFill size={60} color="green"/>
               </Button>
             </CardImg>
 
             <CardContent>
-              <h3>Télétravail</h3>
-              <span>Une sélection de hits pour vous accompagner en télétravail.</span>
+              <h3>Ipséité</h3>
+              <span>Damso</span>
             </CardContent>
           </Card>
+          </StyledLink>
+          <StyledLink to="/playlists">
           <Card>
             <CardImg>
               <img
@@ -233,15 +259,17 @@ export default function Cards() {
                 alt="Focus"
               />
               <Button className="card__play_button">
-                <BsFillPlayCircleFill size={60} />
+                <BsFillPlayCircleFill size={60} color="green"/>
               </Button>
             </CardImg>
 
             <CardContent>
-              <h3>Télétravail</h3>
-              <span>Une sélection de hits pour vous accompagner en télétravail.</span>
+              <h3>Les étoiles vagabondes</h3>
+              <span>Nekfeu</span>
             </CardContent>
           </Card>
+          </StyledLink>
+          <StyledLink to="/playlists">
           <Card>
             <CardImg>
               <img
@@ -249,15 +277,17 @@ export default function Cards() {
                 alt="Focus"
               />
               <Button className="card__play_button">
-                <BsFillPlayCircleFill size={60} />
+                <BsFillPlayCircleFill size={60} color="green"/>
               </Button>
             </CardImg>
 
             <CardContent>
-              <h3>Télétravail</h3>
-              <span>Une sélection de hits pour vous accompagner en télétravail.</span>
+              <h3>Carré</h3>
+              <span>Werenoi</span>
             </CardContent>
           </Card>
+          </StyledLink>
+          <StyledLink to="/playlists">
           <Card>
             <CardImg>
               <img
@@ -265,15 +295,16 @@ export default function Cards() {
                 alt="Focus"
               />
               <Button className="card__play_button">
-                <BsFillPlayCircleFill size={60} />
+                <BsFillPlayCircleFill size={60} color="green"/>
               </Button>
             </CardImg>
 
             <CardContent>
-              <h3>Télétravail</h3>
-              <span>Une sélection de hits pour vous accompagner en télétravail.</span>
+              <h3>Mélo</h3>
+              <span>Tiakola</span>
             </CardContent>
           </Card>
+          </StyledLink>
         </InlineCards>
       </CardsWrap>
     </>
@@ -283,6 +314,9 @@ export default function Cards() {
 export const CardsWrap = styled.div`
   padding-bottom: 1.5rem;
   padding-left: 20px;
+  h1 {
+    color:white;
+  }
 `;
 
 export const InlineCards = styled.div`
@@ -373,4 +407,10 @@ export const Button = styled.div`
     transform: scale(1.06);
   }
 `;
-  
+
+const StyledLink = styled(Link)`
+  text-decoration: none;
+  color: white;
+`;
+
+export default Cards;

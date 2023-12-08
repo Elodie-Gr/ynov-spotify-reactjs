@@ -1,7 +1,7 @@
-import React, { useEffect } from "react";
+import React from "react";
 import styled from "styled-components";
 
-export default function Track() {
+const Track = () => {
   return (
     <Container>
         <div className="track">
@@ -17,7 +17,7 @@ export default function Track() {
         </div>
     </Container>
   );
-}
+};
 
 const Container = styled.div`
   .track {
@@ -39,3 +39,5 @@ const Container = styled.div`
     }
   }
 `;
+
+export default Track;

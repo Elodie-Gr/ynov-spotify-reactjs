@@ -1,10 +1,12 @@
-import React from "react";
+import React, { useRef, useState } from "react";
 import styled from "styled-components";
-import CurrentTrack from "./Track";
+import CurrentTrack from "../components/Track";
 
-import PlayerControls from "./PlayerControls";
-import Volume from "./Volume";
-export default function Footer() {
+import PlayerControls from "../components/PlayerControls";
+import Volume from "../components/Volume";
+
+const Footer = () => {
+
   return (
     <Container>
       <CurrentTrack />
@@ -12,7 +14,7 @@ export default function Footer() {
       <Volume />
     </Container>
   );
-}
+};
 
 const Container = styled.div`
   height: 100%;
@@ -25,3 +27,5 @@ const Container = styled.div`
   justify-content: center;
   padding: 0 1rem;
 `;
+
+export default Footer;

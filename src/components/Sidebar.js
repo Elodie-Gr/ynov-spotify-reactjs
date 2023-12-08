@@ -1,10 +1,18 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { MdHomeFilled, MdSearch } from "react-icons/md";
 import { IoLibrary } from "react-icons/io5";
-export default function Sidebar() {
+import { Link } from "react-router-dom";
+
+const Sidebar = () => {
+  const [sidecarOpen, setSidecarOpen] = useState(true);
+
+  const toggleSidecar = () => {
+    setSidecarOpen(!sidecarOpen);
+  };
+
   return (
-    <Container>
+    <Container sidecarOpen={sidecarOpen}>
       <div className="top__links">
         <div className="logo">
           <img
@@ -14,16 +22,20 @@ export default function Sidebar() {
         </div>
         <ul>
           <li>
-            <MdHomeFilled />
-            <span>Accueil</span>
+          <StyledLink to="/">
+            <MdHomeFilled size={20}/>
+          </StyledLink>
+            <StyledLink to="/" className={sidecarOpen ? "" : "hidden"}>Accueil</StyledLink>
           </li>
-          <li>
-            <MdSearch />
-            <span>Rechercher</span>
+          <li className="menu">
+          <StyledLink>
+          <MdSearch size={20}/>
+          </StyledLink>
+          <StyledLink className={sidecarOpen ? "" : "hidden"}>Rechercher</StyledLink>
           </li>
-          <li>
-            <IoLibrary />
-            <span>Bibliothèque</span>
+          <li onClick={toggleSidecar}>
+            <IoLibrary size={20}/>
+            <StyledLink className={sidecarOpen ? "" : "hidden"} >Bibliothèque</StyledLink>
           </li>
         </ul>
       </div>
@@ -37,7 +49,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   height: 100%;
-  width: 100%;
+  width: ${({ sidecarOpen }) => (sidecarOpen ? "100%" : "60px")};
   .top__links {
     display: flex;
     flex-direction: column;
@@ -65,5 +77,16 @@ const Container = styled.div`
         }
       }
     }
+    .hidden {
+      display: none;
+    }
   }
 `;
+
+const StyledLink = styled(Link)`
+  text-decoration: none;
+  color: white;
+`;
+
+
+export default Sidebar;

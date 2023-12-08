@@ -1,23 +1,42 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
-import { FaSearch } from "react-icons/fa";
 import { CgProfile } from "react-icons/cg";
-export default function Navbar({ navBackground }) {
+import { IoIosArrowDropleftCircle, IoIosArrowDroprightCircle } from "react-icons/io";
+import { FaSearch } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
+
+const Navbar = () => {
+
+  const navigate = useNavigate();
+
+  const navigateToPreviousPage = () => {
+    navigate(-1);
+  };
+
+  const navigateToNextPage = () => {
+    navigate(+1);
+  };
+
+
   return (
-    <Container navBackground={navBackground}>
-      <div className="search__bar">
+    <Container>
+      <div className="arrow">
+        <IoIosArrowDropleftCircle size={40} onClick={navigateToPreviousPage} />
+        <IoIosArrowDroprightCircle size={40} onClick={navigateToNextPage}/>
+      </div>
+      <div className="search__bar">      
         <FaSearch />
         <input type="text" placeholder="Que souhaitez-vous écouter ?" />
       </div>
       <div className="avatar">
         <a>
           <CgProfile />
-          <span>Toto</span>
+          <span>SpoWish</span>
         </a>
       </div>
     </Container>
   );
-}
+};
 
 const Container = styled.div`
   display: flex;
@@ -30,22 +49,11 @@ const Container = styled.div`
   transition: 0.3s ease-in-out;
   background-color: ${({ navBackground }) =>
     navBackground ? "rgba(0,0,0,0.7)" : "none"};
-  .search__bar {
-    background-color: white;
-    width: 30%;
+  .arrow {
     padding: 0.4rem 1rem;
-    border-radius: 2rem;
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    input {
-      border: none;
-      height: 2rem;
-      width: 100%;
-      &:focus {
-        outline: none;
-      }
-    }
   }
   .avatar {
     background-color: black;
@@ -72,4 +80,24 @@ const Container = styled.div`
       }
     }
   }
+  .search__bar {
+    background-color: white;
+    width: 30%;
+    padding: 0.4rem 1rem;
+    border-radius: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    input {
+      border: none;
+      height: 2rem;
+      width: 100%;
+      &:focus {
+        outline: none;
+      }
+      
+    }
+  }
 `;
+
+export default Navbar;

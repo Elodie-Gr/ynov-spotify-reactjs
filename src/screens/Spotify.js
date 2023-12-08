@@ -1,11 +1,11 @@
-import React, { useEffect, useRef, useState } from "react";
-import Sidebar from "./Sidebar";
+import React from "react";
+import Sidebar from "../components/Sidebar";
 import styled from "styled-components";
-import Footer from "./Footer";
-import Navbar from "./Navbar";
+import Footer from "../components/Footer";
+import Navbar from "../components/Navbar";
 import Body from "./Body";
 
-export default function Spotify() {
+const Spotify = () => {
   return (
     <Container>
       <div className="spotify__body">
@@ -22,7 +22,7 @@ export default function Spotify() {
       </div>
     </Container>
   );
-}
+};
 
 const Container = styled.div`
   max-width: 100vw;
@@ -51,3 +51,5 @@ const Container = styled.div`
     }
   }
 `;
+
+export default Spotify;
