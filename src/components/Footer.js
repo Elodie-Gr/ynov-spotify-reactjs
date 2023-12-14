@@ -11,7 +11,6 @@ const Footer = () => {
     <Container>
       <CurrentTrack />
       <PlayerControls />
-      <Volume />
     </Container>
   );
 };
