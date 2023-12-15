@@ -44,8 +44,6 @@ const Container = styled.div`
   align-items: center;
   padding: 2rem;
   height: 15vh;
-  position: sticky;
-  top: 0;
   transition: 0.3s ease-in-out;
   background-color: ${({ navBackground }) =>
     navBackground ? "rgba(0,0,0,0.7)" : "none"};

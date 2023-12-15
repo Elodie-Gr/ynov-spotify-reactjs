@@ -1,315 +1,71 @@
 import React from "react";
 import styled from "styled-components";
-import {
-    BsFillPlayCircleFill,
-  } from "react-icons/bs";
+import { BsFillPlayCircleFill } from "react-icons/bs";
 import { Link } from "react-router-dom";
 
+const cardData = [
+  {
+    title: "Derniers sons",
+    items: [
+      { title: "Sons Likés", image: "https://misc.scdn.co/liked-songs/liked-songs-300.png" },
+      { title: "Sons Likés", image: "https://misc.scdn.co/liked-songs/liked-songs-300.png" },
+      { title: "Sons Likés", image: "https://misc.scdn.co/liked-songs/liked-songs-300.png" },
+      { title: "Sons Likés", image: "https://misc.scdn.co/liked-songs/liked-songs-300.png" },
+      { title: "Sons Likés", image: "https://misc.scdn.co/liked-songs/liked-songs-300.png" },
+    ],
+  },
+  {
+    title: "Artistes",
+    items: [
+      { title: "Top 50 France", image: "https://charts-images.scdn.co/REGIONAL_FR_DEFAULT.jpg" },
+      { title: "Top 50 France", image: "https://charts-images.scdn.co/REGIONAL_FR_DEFAULT.jpg" },
+      { title: "Top 50 France", image: "https://charts-images.scdn.co/REGIONAL_FR_DEFAULT.jpg" },
+      { title: "Top 50 France", image: "https://charts-images.scdn.co/REGIONAL_FR_DEFAULT.jpg" },
+      { title: "Top 50 France", image: "https://charts-images.scdn.co/REGIONAL_FR_DEFAULT.jpg" },
+    ],
+  },
+  {
+    title: "Albums",
+    items: [
+      { title: "NI", artist: "Ninho", image: "https://i.scdn.co/image/ab67706f000000020c527c5b3a3398fc24082d5b" },
+      { title: "Ipséité", artist: "Damso", image: "https://i.scdn.co/image/ab67706f000000020c527c5b3a3398fc24082d5b" },
+      { title: "Les étoiles vagabondes", artist: "Nekfeu", image: "https://i.scdn.co/image/ab67706f000000020c527c5b3a3398fc24082d5b" },
+      { title: "Carré", artist: "Werenoi", image: "https://i.scdn.co/image/ab67706f000000020c527c5b3a3398fc24082d5b" },
+      { title: "Mélo", artist: "Tiakola", image: "https://i.scdn.co/image/ab67706f000000020c527c5b3a3398fc24082d5b" },
+    ],
+  },
+];
+
 const Cards = () => {
+  return (
+    <>
+      {cardData.map((section, index) => (
+        <CardsWrap key={index}>
+          <h1>{section.title}</h1>
+          <InlineCards>
+            {section.items.map((item, itemIndex) => (
+              <StyledLink to="/playlists" key={itemIndex}>
+                <Card>
+                  <CardImg>
+                    <img src={item.image} alt={item.title} />
+                    <Button className="card__play_button">
+                      <BsFillPlayCircleFill size={60} color="green" />
+                    </Button>
+                  </CardImg>
 
-    return (
-            <>
-              {/* Section 1 */}
-              <CardsWrap>
-                <h1>Derniers sons</h1>
-                <InlineCards>
-                    <StyledLink to="/playlists">
-                  <Card>
-                    <CardImg>
-                      <img
-                        src="https://misc.scdn.co/liked-songs/liked-songs-300.png"
-                        alt="Sons Likés"
-                      />
-                      <Button className="card__play_button">
-                       <BsFillPlayCircleFill size={60} color="green" />
-                      </Button>
-                    </CardImg>
-        
-                    <CardContent>
-                      <h3>Sons likées</h3>
-                    </CardContent>
-                  </Card>
-                  </StyledLink>
-                  <StyledLink to="/playlists">
-                  <Card>
-                    <CardImg>
-                      <img
-                        src="https://misc.scdn.co/liked-songs/liked-songs-300.png"
-                        alt="Sons Likés"
-                      />
-                      <Button className="card__play_button">
-                       <BsFillPlayCircleFill size={60} color="green"/>
-                      </Button>
-                    </CardImg>
-        
-                    <CardContent>
-                      <h3>Sons Likés</h3>
-                    </CardContent>
-                  </Card>
-                  </StyledLink>
-                  <StyledLink to="/playlists">
-                  <Card>
-                    <CardImg>
-                      <img
-                        src="https://misc.scdn.co/liked-songs/liked-songs-300.png"
-                        alt="Sons Likés"
-                      />
-                      <Button className="card__play_button">
-                       <BsFillPlayCircleFill size={60} color="green"/>
-                      </Button>
-                    </CardImg>
-        
-                    <CardContent>
-                      <h3>Sons Likés</h3>
-                    </CardContent>
-                  </Card>
-                  </StyledLink>
-                  <StyledLink to="/playlists">
-                  <Card>
-                    <CardImg>
-                      <img
-                        src="https://misc.scdn.co/liked-songs/liked-songs-300.png"
-                        alt="Sons Likés"
-                      />
-                      <Button className="card__play_button">
-                       <BsFillPlayCircleFill size={60} color="green"/>
-                      </Button>
-                    </CardImg>
-        
-                    <CardContent>
-                      <h3>Sons Likés</h3>
-                    </CardContent>
-                  </Card>
-                  </StyledLink>
-                  <StyledLink to="/playlists">
-                  <Card>
-                    <CardImg>
-                      <img
-                        src="https://misc.scdn.co/liked-songs/liked-songs-300.png"
-                        alt="Focus"
-                      />
-                      <Button className="card__play_button">
-                        <BsFillPlayCircleFill size={60} color="green"/>
-                      </Button>
-                    </CardImg>
-        
-                    <CardContent>
-                      <h3>Sons Likés</h3>
-                    </CardContent>
-                  </Card>
-                  </StyledLink>
-                </InlineCards>
-              </CardsWrap>
-              {/* Section 2 */}
-              <CardsWrap>
-                <h1>Artistes</h1>
-                <InlineCards>
-                  {/* Card 1 */}
-                  <StyledLink to="/playlists">
-                  <Card>
-                    <CardImg>
-                      <img
-                        src="https://charts-images.scdn.co/REGIONAL_FR_DEFAULT.jpg"
-                        alt="Regional BR"
-                      />
-                      <Button className="card__play_button">
-                        <BsFillPlayCircleFill size={60} color="green"/>
-                      </Button>
-                    </CardImg>
-        
-                    <CardContent>
-                      <h3>Top 50 France</h3>
-                      <span>
-                        Votre point quotidien sur les titres les plus joués en France en ce moment.
-                      </span>
-                    </CardContent>
-                  </Card>
-                  </StyledLink>
-                  {/* Card 2 */}
-                  <StyledLink to="/playlists">
-                  <Card>
-                    <CardImg>
-                      <img
-                        src="https://charts-images.scdn.co/REGIONAL_FR_DEFAULT.jpg"
-                        alt="Regional BR"
-                      />
-                      <Button className="card__play_button">
-                        <BsFillPlayCircleFill size={60} color="green"/>
-                      </Button>
-                    </CardImg>
-        
-                    <CardContent>
-                      <h3>Top 50 France</h3>
-                      <span>
-                        Votre point quotidien sur les titres les plus joués en France en ce moment.
-                      </span>
-                    </CardContent>
-                  </Card>
-                  </StyledLink>
-                  {/* Card 3 */}
-                  <StyledLink to="/playlists">
-                  <Card>
-                    <CardImg>
-                      <img
-                        src="https://charts-images.scdn.co/REGIONAL_FR_DEFAULT.jpg"
-                        alt="Regional FR"
-                      />
-                      <Button className="card__play_button">
-                        <BsFillPlayCircleFill size={60} color="green"/>
-                      </Button>
-                    </CardImg>
-        
-                    <CardContent>
-                      <h3>Top 50 France</h3>
-                      <span>
-                        Votre point quotidien sur les titres les plus joués en France en ce moment.
-                      </span>
-                    </CardContent>
-                  </Card>
-                  </StyledLink>
-                  <StyledLink to="/playlists">
-                  {/* Card 4 */}
-                  <Card>
-                    <CardImg>
-                      <img
-                        src="https://charts-images.scdn.co/REGIONAL_FR_DEFAULT.jpg"
-                        alt="Regional FR"
-                      />
-                      <Button className="card__play_button">
-                        <BsFillPlayCircleFill size={60} color="green"/>
-                      </Button>
-                    </CardImg>
-        
-                    <CardContent>
-                      <h3>Top 50 France</h3>
-                      <span>
-                        Votre point quotidien sur les titres les plus joués en France en ce moment.
-                      </span>
-                    </CardContent>
-                  </Card>
-                  </StyledLink>
-                  <StyledLink to="/playlists">
-                  {/* Card 5 */}
-                  <Card>
-                    <CardImg>
-                      <img
-                        src="https://charts-images.scdn.co/REGIONAL_FR_DEFAULT.jpg"
-                        alt="Regional FR"
-                      />
-                      <Button className="card__play_button">
-                        <BsFillPlayCircleFill size={60} color="green"/>
-                      </Button>
-                    </CardImg>
-        
-                    <CardContent>
-                      <h3>Top 50 France</h3>
-                      <span>
-                        Votre point quotidien sur les titres les plus joués en France en ce moment.
-                      </span>
-                    </CardContent>
-                  </Card>
-                  </StyledLink>
-                </InlineCards>
-              </CardsWrap>
-              {/* Section 3 */}
-      <CardsWrap>
-        <h1>Albums</h1>
-        <InlineCards>
-        <StyledLink to="/playlists">
-          <Card>
-            <CardImg>
-              <img
-                src="https://i.scdn.co/image/ab67706f000000020c527c5b3a3398fc24082d5b"
-                alt="Focus"
-              />
-              <Button className="card__play_button">
-                <BsFillPlayCircleFill size={60} color="green"/>
-              </Button>
-            </CardImg>
-
-            <CardContent>
-              <h3>NI</h3>
-              <span>Ninho</span>
-            </CardContent>
-          </Card>
-          </StyledLink>
-          <StyledLink to="/playlists">
-          <Card>
-            <CardImg>
-              <img
-                src="https://i.scdn.co/image/ab67706f000000020c527c5b3a3398fc24082d5b"
-                alt="Focus"
-              />
-              <Button className="card__play_button">
-                <BsFillPlayCircleFill size={60} color="green"/>
-              </Button>
-            </CardImg>
-
-            <CardContent>
-              <h3>Ipséité</h3>
-              <span>Damso</span>
-            </CardContent>
-          </Card>
-          </StyledLink>
-          <StyledLink to="/playlists">
-          <Card>
-            <CardImg>
-              <img
-                src="https://i.scdn.co/image/ab67706f000000020c527c5b3a3398fc24082d5b"
-                alt="Focus"
-              />
-              <Button className="card__play_button">
-                <BsFillPlayCircleFill size={60} color="green"/>
-              </Button>
-            </CardImg>
-
-            <CardContent>
-              <h3>Les étoiles vagabondes</h3>
-              <span>Nekfeu</span>
-            </CardContent>
-          </Card>
-          </StyledLink>
-          <StyledLink to="/playlists">
-          <Card>
-            <CardImg>
-              <img
-                src="https://i.scdn.co/image/ab67706f000000020c527c5b3a3398fc24082d5b"
-                alt="Focus"
-              />
-              <Button className="card__play_button">
-                <BsFillPlayCircleFill size={60} color="green"/>
-              </Button>
-            </CardImg>
-
-            <CardContent>
-              <h3>Carré</h3>
-              <span>Werenoi</span>
-            </CardContent>
-          </Card>
-          </StyledLink>
-          <StyledLink to="/playlists">
-          <Card>
-            <CardImg>
-              <img
-                src="https://i.scdn.co/image/ab67706f000000020c527c5b3a3398fc24082d5b"
-                alt="Focus"
-              />
-              <Button className="card__play_button">
-                <BsFillPlayCircleFill size={60} color="green"/>
-              </Button>
-            </CardImg>
-
-            <CardContent>
-              <h3>Mélo</h3>
-              <span>Tiakola</span>
-            </CardContent>
-          </Card>
-          </StyledLink>
-        </InlineCards>
-      </CardsWrap>
+                  <CardContent>
+                    <h3>{item.title}</h3>
+                    {item.artist && <span>{item.artist}</span>}
+                  </CardContent>
+                </Card>
+              </StyledLink>
+            ))}
+          </InlineCards>
+        </CardsWrap>
+      ))}
     </>
   );
-}
+};
 
 export const CardsWrap = styled.div`
   padding-bottom: 1.5rem;
