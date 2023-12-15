@@ -8,6 +8,8 @@ import { useNavigate } from "react-router-dom";
 const Navbar = () => {
 
   const navigate = useNavigate();
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
 
   const navigateToPreviousPage = () => {
     navigate(-1);
@@ -17,6 +19,17 @@ const Navbar = () => {
     navigate(+1);
   };
 
+  const handleSearch = async () => {
+    try {
+      const response = await fetch(`urlderecherche${searchQuery}`);
+      const data = await response.json();
+
+      setSearchResults(data);
+    } catch (error) {
+      console.error("Error fetching search results:", error);
+    }
+  };
+  
 
   return (
     <Container>
@@ -25,8 +38,12 @@ const Navbar = () => {
         <IoIosArrowDroprightCircle size={40} onClick={navigateToNextPage}/>
       </div>
       <div className="search__bar">      
-        <FaSearch />
-        <input type="text" placeholder="Que souhaitez-vous écouter ?" />
+        <FaSearch onClick={handleSearch} />
+        <input type="text" placeholder="Que souhaitez-vous écouter ?" value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)} />
+            {searchResults.map((result) => (
+          <div key={result.id}>{result.name}</div>
+        ))}
       </div>
       <div className="avatar">
         <a>
