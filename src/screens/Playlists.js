@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState, useEffect} from "react";
 import styled from "styled-components";
 import { AiFillClockCircle } from "react-icons/ai";
 import Footer from "../components/Footer";
@@ -6,55 +6,209 @@ import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
 import {fetchAlbumById} from "../services/api/albumApi";
 import {fetchArtistById} from "../services/api/artistApi"; 
+import { useParams } from "react-router-dom";
+import { fetchSongById } from "../services/api/songApi";
 
 const Playlists = () => {
+  const { playlistId } = useParams();
+  console.log("Playlist ID:", playlistId);
+  const [playlistDataAlbum, setplaylistDataAlbum] = useState(null);
+  const [playlistDataArtist, setplaylistDataArtist] = useState(null);
+  const [playlistDataSong, setplaylistDataSong] = useState(null);
+  const [songDetails, setSongDetails] = useState([]);
 
+  const formatDuration = (durationInSeconds) => {
+    const minutes = Math.floor(durationInSeconds / 60);
+    const seconds = Math.floor(durationInSeconds % 60);
+    return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+  };
+
+  const fetchSongDetails = async (songId) => {
+    try {
+      const song = await fetchSongById(songId);
+      return song;
+    } catch (error) {
+      console.error("Error fetching song details:", error);
+      return null;
+    }
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const playlist = await fetchAlbumById(playlistId);
+        console.log("Fetched Album Data:", playlist);
+        setplaylistDataAlbum(playlist);
+        console.log(playlist);
+      } catch (error) {
+        console.error("Error fetching playlist:", error);
+      }
+    };
+
+    fetchData();
+  }, [playlistId]);
+
+ useEffect(() => {
+  const fetchDataArtist = async () => {
+    try {
+      const playlistArtist = await fetchArtistById(playlistId);
+      console.log("Fetched Artist Data:", playlistArtist);
+      setplaylistDataArtist(playlistArtist); // Utilisez setplaylistDataArtist au lieu de setArtist
+      console.log(playlistArtist);
+
+      // Fetch song details and store in state
+      const detailsPromises = playlistArtist.songs.map(async (songId) => {
+        return await fetchSongDetails(songId);
+      });
+
+      const resolvedDetails = await Promise.all(detailsPromises);
+      setSongDetails(resolvedDetails);
+    } catch (error) {
+      console.error("Error fetching playlistArtist:", error);
+    }
+  };
+
+  fetchDataArtist();
+}, [playlistId]);
+
+useEffect(() => {
+  const fetchDataSong = async () => {
+    try {
+      const playlistSong = await fetchSongById(playlistId);
+      console.log("Fetched Song Data:", playlistSong);
+      setplaylistDataSong(playlistSong);
+      console.log(playlistSong);
+    } catch (error) {
+      console.error("Error fetching playlist:", error);
+    }
+  };
+
+  fetchDataSong();
+}, [playlistId]);
+
+  if (!playlistDataAlbum && !playlistDataArtist &&!playlistDataSong) {
+    return <p>Loading...</p>;
+  }
 
     return (
-        <Container>
-        <div className="spotify__body">
-          <Sidebar />
-          <div className="body">
-            <Navbar/>
-            <div className="body__contents">
+      <Container>
+      <div className="spotify__body">
+        <Sidebar />
+        <div className="body">
+          <Navbar />
+          <div className="body__contents">
+            {/* Section for les données de musique */}
             <div className="playlist">
-            <div className="image">
-              <img src="" alt="selected playlist" />
+                {playlistDataSong && (
+                  <>
+                    <div className="image">
+                      <img src={playlistDataSong.albumCover} alt="selected playlist" />
+                    </div>
+                    <div className="details">
+                      <span className="type">Playlist</span>
+                      <h1 className="title">{playlistDataSong.title}</h1>
+                    </div>
+                  </>
+                )}
+              </div>
+  
+             {/* Section for les données de l'album */}
+              <div className="playlist">
+                {playlistDataAlbum && (
+                  <>
+                    <div className="image">
+                      <img src={playlistDataAlbum.albumCover} alt="selected playlist" />
+                    </div>
+                    <div className="details">
+                      <span className="type">Playlist</span>
+                      <h1 className="title">{playlistDataAlbum.title}</h1>
+                    </div>
+                  </>
+                )}
+              </div>
+    
+            {/* Section pour les données de l'artiste */}
+            <div className="artist">
+            {playlistDataArtist && (
+                  <>
+              <div className="image">
+                {/* Ajoutez ici une image ou d'autres détails de l'artiste */}
+              </div>
+              <div className="details">
+                <span className="type">Artiste</span>
+                <h1 className="title">{playlistDataArtist.name}</h1>
+              </div>
+              </>
+                )}
             </div>
-            <div className="details">
-              <span className="type">Playlist</span>
-              <h1 className="title">Nom</h1>
-              <p className="description">Description</p>
-            </div>
-          </div>
-          <div className="list">
-            <div className="header-row">
-              <div className="col">
-                <span>#</span>
+  
+            <div className="list">
+              <div className="header-row">
+                <div className="col">
+                  <span>#</span>
+                </div>
+                <div className="col">
+                  <span>Titre</span>
+                </div>
+                <div className="col">
+                  <span>Album</span>
+                </div>
+                <div className="col">
+                  <span>
+                    <AiFillClockCircle />
+                  </span>
+                </div>
               </div>
-              <div className="col">
-                <span>Titre</span>
+              {playlistDataAlbum && (
+              <div className="tracks">
+              {playlistDataAlbum.songs.map((song, index) => (
+                <div key={song._id} className="row">
+                  <div className="col">{index + 1}</div>
+                  <div className="col">
+                    <div className="detail">
+                      <div className="info">
+                        <span>{song.title}</span>
+                        <span>{song.artistName}</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="col">{song.albumTitle}</div>
+                  <div className="col">
+                    <span>{formatDuration(song.duration)}</span>
+                  </div>
+                </div>
+              ))}
               </div>
-              <div className="col">
-                <span>Album</span>
-              </div>
-              <div className="col">
-                <span>
-                  <AiFillClockCircle />
-                </span>
-              </div>
-            </div>
-            <div className="tracks">
+              )}
 
+<div className="tracks">
+        {songDetails.map((song, index) => (
+          <div key={song._id} className="row">
+            <div className="col">{index + 1}</div>
+            <div className="col">
+              <div className="detail">
+                <div className="info">
+                {song.title && <span>{song.title}</span>}
+                {song.artistName && <span>{song.artistName}</span>}
+                </div>
+              </div>
+            </div>
+            <div className="col">{song.albumTitle || 'N/A'}</div>
+            <div className="col">
+            {formatDuration(song.duration) && <span>{formatDuration(song.duration)}</span>}
             </div>
           </div>
+        ))}
+      </div>
+                
             </div>
           </div>
         </div>
-        <div className="spotify__footer">
-          <Footer />
-        </div>
-      </Container>
+      </div>
+      <div className="spotify__footer">
+        <Footer />
+      </div>
+    </Container>
   );
 };
 

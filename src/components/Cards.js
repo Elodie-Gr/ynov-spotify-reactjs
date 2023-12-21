@@ -6,56 +6,6 @@ import { fetchSongs } from "../services/api/songApi";
 import { fetchArtists } from "../services/api/artistApi";
 import { fetchAlbums } from "../services/api/albumApi";
 
-
-
-/*const cardData = [
-  {
-    title: "Derniers sons",
-    items: [
-      { title: "Sons Likés", image: "https://misc.scdn.co/liked-songs/liked-songs-300.png" },
-      { title: "Sons Likés", image: "https://misc.scdn.co/liked-songs/liked-songs-300.png" },
-      { title: "Sons Likés", image: "https://misc.scdn.co/liked-songs/liked-songs-300.png" },
-      { title: "Sons Likés", image: "https://misc.scdn.co/liked-songs/liked-songs-300.png" },
-      { title: "Sons Likés", image: "https://misc.scdn.co/liked-songs/liked-songs-300.png" },
-      { title: "Sons Likés", image: "https://misc.scdn.co/liked-songs/liked-songs-300.png" },
-      { title: "Sons Likés", image: "https://misc.scdn.co/liked-songs/liked-songs-300.png" },
-      { title: "Sons Likés", image: "https://misc.scdn.co/liked-songs/liked-songs-300.png" },
-      { title: "Sons Likés", image: "https://misc.scdn.co/liked-songs/liked-songs-300.png" },
-      { title: "Sons Likés", image: "https://misc.scdn.co/liked-songs/liked-songs-300.png" }
-    ],
-  },
-  {
-    title: "Artistes",
-    items: [
-      { title: "Top 50 France", image: "https://charts-images.scdn.co/REGIONAL_FR_DEFAULT.jpg" },
-      { title: "Top 50 France", image: "https://charts-images.scdn.co/REGIONAL_FR_DEFAULT.jpg" },
-      { title: "Top 50 France", image: "https://charts-images.scdn.co/REGIONAL_FR_DEFAULT.jpg" },
-      { title: "Top 50 France", image: "https://charts-images.scdn.co/REGIONAL_FR_DEFAULT.jpg" },
-      { title: "Top 50 France", image: "https://charts-images.scdn.co/REGIONAL_FR_DEFAULT.jpg" },
-      { title: "Top 50 France", image: "https://charts-images.scdn.co/REGIONAL_FR_DEFAULT.jpg" },
-      { title: "Top 50 France", image: "https://charts-images.scdn.co/REGIONAL_FR_DEFAULT.jpg" },
-      { title: "Top 50 France", image: "https://charts-images.scdn.co/REGIONAL_FR_DEFAULT.jpg" },
-      { title: "Top 50 France", image: "https://charts-images.scdn.co/REGIONAL_FR_DEFAULT.jpg" },
-      { title: "Top 50 France", image: "https://charts-images.scdn.co/REGIONAL_FR_DEFAULT.jpg" },
-    ],
-  },
-  {
-    title: "Albums",
-    items: [
-      { title: "NI", artist: "Ninho", image: "https://i.scdn.co/image/ab67706f000000020c527c5b3a3398fc24082d5b" },
-      { title: "Ipséité", artist: "Damso", image: "https://i.scdn.co/image/ab67706f000000020c527c5b3a3398fc24082d5b" },
-      { title: "Etoiles", artist: "Nekfeu", image: "https://i.scdn.co/image/ab67706f000000020c527c5b3a3398fc24082d5b" },
-      { title: "Carré", artist: "Werenoi", image: "https://i.scdn.co/image/ab67706f000000020c527c5b3a3398fc24082d5b" },
-      { title: "Mélo", artist: "Tiakola", image: "https://i.scdn.co/image/ab67706f000000020c527c5b3a3398fc24082d5b" },
-      { title: "NI", artist: "Ninho", image: "https://i.scdn.co/image/ab67706f000000020c527c5b3a3398fc24082d5b" },
-      { title: "Ipséité", artist: "Damso", image: "https://i.scdn.co/image/ab67706f000000020c527c5b3a3398fc24082d5b" },
-      { title: "Etoiles", artist: "Nekfeu", image: "https://i.scdn.co/image/ab67706f000000020c527c5b3a3398fc24082d5b" },
-      { title: "Carré", artist: "Werenoi", image: "https://i.scdn.co/image/ab67706f000000020c527c5b3a3398fc24082d5b" },
-      { title: "Mélo", artist: "Tiakola", image: "https://i.scdn.co/image/ab67706f000000020c527c5b3a3398fc24082d5b" },
-    ],
-  },
-];*/
-
 const Cards = () => {
   const [songs, setSongs] = useState([]);
   const [albums, setAlbums] = useState([]);
@@ -110,6 +60,7 @@ const Cards = () => {
     {
       title: "Derniers sons",
       items: songs.slice(0, 10).map((song) => ({
+        id: song._id,
         title: song.title,
         image: song.albumTitle,  
         artist: song.artistName,
@@ -118,6 +69,7 @@ const Cards = () => {
     {
       title: "Artistes",
       items: artists.slice(0, 10).map((artist) => ({
+        id: artist._id,
         title: artist.name,
         //image: artist.image, 
       })),
@@ -125,6 +77,7 @@ const Cards = () => {
     {
       title: "Albums",
       items: albums.slice(0, 10).map((album) => ({
+        id: album._id,
         title: album.albumTitle,
         artist: album.artistName,
         image: album.albumCover,  
@@ -140,7 +93,7 @@ const Cards = () => {
           <h1>{section.title}</h1>
           <InlineCards>
             {section.items.map((item, itemIndex) => (
-              <StyledLink to="/playlists" key={itemIndex}>
+              <StyledLink to={`/playlists/${item.id}`} key={itemIndex}>
                 <Card>
                   <CardImg>
                     <img src={item.image} alt={item.title} />

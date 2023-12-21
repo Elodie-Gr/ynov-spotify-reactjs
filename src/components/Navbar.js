@@ -9,7 +9,11 @@ const Navbar = () => {
 
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
-  const [searchResults, setSearchResults] = useState([]);
+  const [searchResults, setSearchResults] = useState({
+    songs: [],
+    artists: [],
+    albums: [],
+  });
 
   const navigateToPreviousPage = () => {
     navigate(-1);
@@ -21,10 +25,19 @@ const Navbar = () => {
 
   const handleSearch = async () => {
     try {
-      const response = await fetch(`urlderecherche${searchQuery}`);
-      const data = await response.json();
+       const songsResponse = await fetch(`http://localhost:5001/api/v1/song/${searchQuery}`);
+      const artistsResponse = await fetch(`http://localhost:5001/api/v1/artist/${searchQuery}`);
+      const albumsResponse = await fetch(`http://localhost:5001/api/v1/album/${searchQuery}`);
 
-      setSearchResults(data);
+      const songsData = await songsResponse.json();
+      const artistsData = await artistsResponse.json();
+      const albumsData = await albumsResponse.json();
+
+      setSearchResults({
+        songs: songsData,
+        artists: artistsData,
+        albums: albumsData,
+      });
     } catch (error) {
       console.error("Error fetching search results:", error);
     }
@@ -41,7 +54,7 @@ const Navbar = () => {
         <FaSearch onClick={handleSearch} />
         <input type="text" placeholder="Que souhaitez-vous écouter ?" value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)} />
-            {searchResults.map((result) => (
+            {searchResults.songs.map((result) => (
           <div key={result.id}>{result.name}</div>
         ))}
       </div>

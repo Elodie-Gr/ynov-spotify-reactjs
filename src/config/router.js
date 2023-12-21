@@ -8,7 +8,7 @@ const router = createBrowserRouter([
     element: <Home />
   },
   {
-    path: "/playlists",
+    path: "/playlists/:playlistId",
     element: <Playlists />
   }
 ]);
