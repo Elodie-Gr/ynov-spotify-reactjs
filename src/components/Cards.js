@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import { fetchSongs } from "../services/api/songApi";
 import { fetchArtists } from "../services/api/artistApi";
 import { fetchAlbums } from "../services/api/albumApi";
+import CoverTemporaire from "../coverTemporaire/1703167485520.jpeg";
 
 const Cards = () => {
   const [songs, setSongs] = useState([]);
@@ -96,7 +97,7 @@ const Cards = () => {
               <StyledLink to={`/playlists/${item.id}`} key={itemIndex}>
                 <Card>
                   <CardImg>
-                    <img src={item.image} alt={item.title} />
+                    <img src={CoverTemporaire} alt={item.title} />
                     <Button className="card__play_button">
                       <BsFillPlayCircleFill size={60} color="green" />
                     </Button>
@@ -142,7 +143,7 @@ display: flex;
 
 export const Card = styled.div`
   position: relative;
-  width: 80%;
+  width: 70%;
   padding: 1rem;
   overflow: hidden;
   flex: 1;
@@ -162,7 +163,7 @@ export const Card = styled.div`
 export const CardImg = styled.div`
   position: relative;
   margin-bottom: 1rem;
-  padding-bottom: 100%;
+  padding-bottom: 90%;
   box-shadow: 0 10px 30px 0 rgba(0, 0, 0, 0.3), 0 1px 2px 0 rgba(0, 0, 0, 0.2);
   img {
     width: 100%;
@@ -175,7 +176,6 @@ export const CardImg = styled.div`
 `;
 
 export const CardContent = styled.div`
-  min-height: 62px;
 
   h3 {
     font-size: 1rem;
