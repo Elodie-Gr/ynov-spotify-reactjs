@@ -4,8 +4,12 @@ import { AiFillClockCircle } from "react-icons/ai";
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
+import {fetchAlbumById} from "../services/api/albumApi";
+import {fetchArtistById} from "../services/api/artistApi"; 
 
 const Playlists = () => {
+
+
     return (
         <Container>
         <div className="spotify__body">

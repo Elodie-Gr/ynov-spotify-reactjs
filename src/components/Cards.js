@@ -1,9 +1,14 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import styled from "styled-components";
 import { BsFillPlayCircleFill } from "react-icons/bs";
 import { Link } from "react-router-dom";
+import { fetchSongs } from "../services/api/songApi";
+import { fetchArtists } from "../services/api/artistApi";
+import { fetchAlbums } from "../services/api/albumApi";
 
-const cardData = [
+
+
+/*const cardData = [
   {
     title: "Derniers sons",
     items: [
@@ -12,11 +17,21 @@ const cardData = [
       { title: "Sons Likés", image: "https://misc.scdn.co/liked-songs/liked-songs-300.png" },
       { title: "Sons Likés", image: "https://misc.scdn.co/liked-songs/liked-songs-300.png" },
       { title: "Sons Likés", image: "https://misc.scdn.co/liked-songs/liked-songs-300.png" },
+      { title: "Sons Likés", image: "https://misc.scdn.co/liked-songs/liked-songs-300.png" },
+      { title: "Sons Likés", image: "https://misc.scdn.co/liked-songs/liked-songs-300.png" },
+      { title: "Sons Likés", image: "https://misc.scdn.co/liked-songs/liked-songs-300.png" },
+      { title: "Sons Likés", image: "https://misc.scdn.co/liked-songs/liked-songs-300.png" },
+      { title: "Sons Likés", image: "https://misc.scdn.co/liked-songs/liked-songs-300.png" }
     ],
   },
   {
     title: "Artistes",
     items: [
+      { title: "Top 50 France", image: "https://charts-images.scdn.co/REGIONAL_FR_DEFAULT.jpg" },
+      { title: "Top 50 France", image: "https://charts-images.scdn.co/REGIONAL_FR_DEFAULT.jpg" },
+      { title: "Top 50 France", image: "https://charts-images.scdn.co/REGIONAL_FR_DEFAULT.jpg" },
+      { title: "Top 50 France", image: "https://charts-images.scdn.co/REGIONAL_FR_DEFAULT.jpg" },
+      { title: "Top 50 France", image: "https://charts-images.scdn.co/REGIONAL_FR_DEFAULT.jpg" },
       { title: "Top 50 France", image: "https://charts-images.scdn.co/REGIONAL_FR_DEFAULT.jpg" },
       { title: "Top 50 France", image: "https://charts-images.scdn.co/REGIONAL_FR_DEFAULT.jpg" },
       { title: "Top 50 France", image: "https://charts-images.scdn.co/REGIONAL_FR_DEFAULT.jpg" },
@@ -29,14 +44,95 @@ const cardData = [
     items: [
       { title: "NI", artist: "Ninho", image: "https://i.scdn.co/image/ab67706f000000020c527c5b3a3398fc24082d5b" },
       { title: "Ipséité", artist: "Damso", image: "https://i.scdn.co/image/ab67706f000000020c527c5b3a3398fc24082d5b" },
-      { title: "Les étoiles vagabondes", artist: "Nekfeu", image: "https://i.scdn.co/image/ab67706f000000020c527c5b3a3398fc24082d5b" },
+      { title: "Etoiles", artist: "Nekfeu", image: "https://i.scdn.co/image/ab67706f000000020c527c5b3a3398fc24082d5b" },
+      { title: "Carré", artist: "Werenoi", image: "https://i.scdn.co/image/ab67706f000000020c527c5b3a3398fc24082d5b" },
+      { title: "Mélo", artist: "Tiakola", image: "https://i.scdn.co/image/ab67706f000000020c527c5b3a3398fc24082d5b" },
+      { title: "NI", artist: "Ninho", image: "https://i.scdn.co/image/ab67706f000000020c527c5b3a3398fc24082d5b" },
+      { title: "Ipséité", artist: "Damso", image: "https://i.scdn.co/image/ab67706f000000020c527c5b3a3398fc24082d5b" },
+      { title: "Etoiles", artist: "Nekfeu", image: "https://i.scdn.co/image/ab67706f000000020c527c5b3a3398fc24082d5b" },
       { title: "Carré", artist: "Werenoi", image: "https://i.scdn.co/image/ab67706f000000020c527c5b3a3398fc24082d5b" },
       { title: "Mélo", artist: "Tiakola", image: "https://i.scdn.co/image/ab67706f000000020c527c5b3a3398fc24082d5b" },
     ],
   },
-];
+];*/
 
 const Cards = () => {
+  const [songs, setSongs] = useState([]);
+  const [albums, setAlbums] = useState([]);
+  const [artists, setArtists] = useState([]);
+
+  useEffect(() => {
+    // Fetch songs when the component mounts
+    const fetchData = async () => {
+      try {
+        const songsData = await fetchSongs();
+        setSongs(songsData);
+        console.log(songsData);
+      } catch (error) {
+        console.error('Error fetching songs:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    // Fetch artist when the component mounts
+    const fetchDataArtist = async () => {
+      try {
+        const artistsData = await fetchArtists();
+        setArtists(artistsData);
+        console.log(artistsData);
+      } catch (error) {
+        console.error('Error fetching artists:', error);
+      }
+    };
+
+    fetchDataArtist();
+  }, []);
+
+  useEffect(() => {
+    // Fetch album when the component mounts
+    const fetchDataAlbum = async () => {
+      try {
+        const albumsData = await fetchAlbums();
+        setAlbums(albumsData);
+        console.log(albumsData);
+      } catch (error) {
+        console.error('Error fetching albums:', error);
+      }
+    };
+
+    fetchDataAlbum();
+  }, []);
+
+  const cardData = [
+    {
+      title: "Derniers sons",
+      items: songs.slice(0, 10).map((song) => ({
+        title: song.title,
+        image: song.albumTitle,  
+        artist: song.artistName,
+      })),
+    },
+    {
+      title: "Artistes",
+      items: artists.slice(0, 10).map((artist) => ({
+        title: artist.name,
+        //image: artist.image, 
+      })),
+    },
+    {
+      title: "Albums",
+      items: albums.slice(0, 10).map((album) => ({
+        title: album.albumTitle,
+        artist: album.artistName,
+        image: album.albumCover,  
+      })),
+    },
+  ];
+
+  
   return (
     <>
       {cardData.map((section, index) => (
@@ -76,11 +172,19 @@ export const CardsWrap = styled.div`
 `;
 
 export const InlineCards = styled.div`
-  display: grid;
-  grid-gap: 1.5rem;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-  overflow-y: hidden;
-  grid-template-rows: 1fr
+display: flex;
+  overflow-x: auto;
+  margin-bottom: -1.5rem;
+  padding-bottom: 1.5rem;
+  width: 100%; 
+
+  & > * {
+    flex: 0 0 320px; // Réglez une largeur fixe pour chaque carte (ajustez au besoin)
+    margin-right: 1.5rem;
+    height: 100%; // Force les cartes à avoir la même hauteur
+    display: flex; // Utilisez le modèle de boîte flexible
+    flex-direction: column; /
+  }
 `;
 
 export const Card = styled.div`
