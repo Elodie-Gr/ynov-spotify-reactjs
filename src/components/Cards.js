@@ -79,8 +79,8 @@ const Cards = () => {
       title: "Albums",
       items: albums.slice(0, 10).map((album) => ({
         id: album._id,
-        title: album.albumTitle,
-        artist: album.artistName,
+        title: album.title,
+        artist: album.artist.name,
         image: album.albumCover,  
       })),
     },
@@ -133,8 +133,8 @@ display: flex;
   width: 100%; 
 
   & > * {
-    flex: 0 0 320px; // Réglez une largeur fixe pour chaque carte (ajustez au besoin)
-    margin-right: 1.5rem;
+    flex: 0 0 250px; // Réglez une largeur fixe pour chaque carte (ajustez au besoin)
+    margin-right: 0;
     height: 100%; // Force les cartes à avoir la même hauteur
     display: flex; // Utilisez le modèle de boîte flexible
     flex-direction: column; /
@@ -151,6 +151,7 @@ export const Card = styled.div`
   transition: background-color .3s ease;
   box-shadow: 0 10px 30px 0 rgba(0, 0, 0, 0.3), 0 1px 2px 0 rgba(0, 0, 0, 0.2);
   border-radius: 8px;
+  max-width: 200px;
   &:hover {
     background-color: #282828
   }
@@ -181,7 +182,7 @@ export const CardContent = styled.div`
     font-size: 1rem;
     line-height: 24px;
     text-transform: none;
-
+    max-width: 100%;
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
@@ -191,6 +192,7 @@ export const CardContent = styled.div`
 
   span {
     font-size: 14px;
+    max-width: 100%;
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
