@@ -8,6 +8,7 @@ import {fetchAlbumById} from "../services/api/albumApi";
 import {fetchArtistById} from "../services/api/artistApi"; 
 import { useParams } from "react-router-dom";
 import { fetchSongById } from "../services/api/songApi";
+import artistImage from "../assets/images/artist.png";
 
 const Playlists = () => {
   const { playlistId } = useParams();
@@ -21,16 +22,6 @@ const Playlists = () => {
     const minutes = Math.floor(durationInSeconds / 60);
     const seconds = Math.floor(durationInSeconds % 60);
     return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
-  };
-
-  const fetchSongDetails = async (songId) => {
-    try {
-      const song = await fetchSongById(songId);
-      return song;
-    } catch (error) {
-      console.error("Error fetching song details:", error);
-      return null;
-    }
   };
 
   useEffect(() => {
@@ -48,42 +39,37 @@ const Playlists = () => {
     fetchData();
   }, [playlistId]);
 
- useEffect(() => {
-  const fetchDataArtist = async () => {
-    try {
-      const playlistArtist = await fetchArtistById(playlistId);
-      console.log("Fetched Artist Data:", playlistArtist);
-      setplaylistDataArtist(playlistArtist); 
-      console.log(playlistArtist);
+  useEffect(() => {
+    const fetchDataSong = async () => {
+      try {
+        const playlistSong = await fetchSongById(playlistId);
+        console.log("Fetched Song Data:", playlistSong);
+        setplaylistDataSong(playlistSong);
+        console.log(playlistSong);
+      } catch (error) {
+        console.error("Error fetching playlist:", error);
+      }
+    };
 
-      const detailsPromises = playlistArtist.songs.map(async (songId) => {
-        return await fetchSongDetails(songId);
-      });
+    fetchDataSong();
+  }, [playlistId]);
 
-      const resolvedDetails = await Promise.all(detailsPromises);
-      setSongDetails(resolvedDetails);
-    } catch (error) {
-      console.error("Error fetching playlistArtist:", error);
-    }
-  };
+  useEffect(() => {
+    const fetchDataArtist = async () => {
+      try {
+        const playlistArtist = await fetchArtistById(playlistId);
+        console.log("Fetched Artist Data:", playlistArtist);
+        setplaylistDataArtist(playlistArtist);
+        console.log(playlistArtist);
+      } catch (error) {
+        console.error("Error fetching playlist:", error);
+      }
+    };
 
-  fetchDataArtist();
-}, [playlistId]);
+    fetchDataArtist();
+  }, [playlistId]);
 
-useEffect(() => {
-  const fetchDataSong = async () => {
-    try {
-      const playlistSong = await fetchSongById(playlistId);
-      console.log("Fetched Song Data:", playlistSong);
-      setplaylistDataSong(playlistSong);
-      console.log(playlistSong);
-    } catch (error) {
-      console.error("Error fetching playlist:", error);
-    }
-  };
 
-  fetchDataSong();
-}, [playlistId]);
 
   if (!playlistDataAlbum && !playlistDataArtist &&!playlistDataSong) {
     return <p>Loading...</p>;
@@ -96,7 +82,7 @@ useEffect(() => {
         <div className="body">
           <Navbar />
           <div className="body__contents">
-            {/* Section for les données de musique */}
+            {/* Section pour les données de musique */}
             <div className="playlist">
                 {playlistDataSong && (
                   <>
@@ -104,7 +90,7 @@ useEffect(() => {
                       <img src={`http://localhost:4000/${playlistDataSong.albumCover}`} alt="selected playlist" />
                     </div>
                     <div className="details">
-                      <span className="type">Playlist</span>
+                      <span className="type">Sons</span>
                       <h1 className="title">{playlistDataSong.title}</h1>
                     </div>
                   </>
@@ -119,27 +105,27 @@ useEffect(() => {
                       <img src={`http://localhost:4000/${playlistDataAlbum.albumCover}`} alt="selected playlist" />
                     </div>
                     <div className="details">
-                      <span className="type">Playlist</span>
+                      <span className="type">Album</span>
                       <h1 className="title">{playlistDataAlbum.title}</h1>
                     </div>
                   </>
                 )}
               </div>
-    
-            {/* Section pour les données de l'artiste */}
-            <div className="artist">
-            {playlistDataArtist && (
+
+              {/* Section pour les données de l'artiste */}
+              <div className="playlist">
+                {playlistDataArtist && (
                   <>
-              <div className="image">
-                {/* Ajoutez ici une image ou d'autres détails de l'artiste */}
-              </div>
-              <div className="details">
-                <span className="type">Artiste</span>
-                <h1 className="title">{playlistDataArtist.name}</h1>
-              </div>
-              </>
+                    <div className="image">
+                      <img src={artistImage} alt="selected playlist" />
+                    </div>
+                    <div className="details">
+                      <span className="type">Artiste</span>
+                      <h1 className="title">{playlistDataArtist.name}</h1>
+                    </div>
+                  </>
                 )}
-            </div>
+              </div>
   
             <div className="list">
               <div className="header-row">
@@ -167,7 +153,7 @@ useEffect(() => {
                     <div className="detail">
                       <div className="info">
                         <span>{song.title}</span>
-                        <span>{song.artistName}</span>
+                        <span>{song.artist.name}</span>
                       </div>
                     </div>
                   </div>
@@ -181,25 +167,45 @@ useEffect(() => {
               )}
 
 <div className="tracks">
-        {songDetails.map((song, index) => (
-          <div key={song._id} className="row">
-            <div className="col">{index + 1}</div>
-            <div className="col">
-              <div className="detail">
-                <div className="info">
-                {song.title && <span>{song.title}</span>}
-                {song.artist.name && <span>{song.artist.name}</span>}
-                </div>
+      {playlistDataSong && (
+        <div className="row">
+          <div className="col">1</div>
+          <div className="col">
+            <div className="detail">
+              <div className="info">
+                <span>{playlistDataSong.title}</span>
+                <span>{playlistDataSong.artist.name}</span>
               </div>
             </div>
-            <div className="col">{song.album.title || 'N/A'}</div>
-            <div className="col">
-            {formatDuration(song.duration) && <span>{formatDuration(song.duration)}</span>}
-            </div>
           </div>
-        ))}
-      </div>
-                
+          <div className="col">{playlistDataSong.album.title}</div>
+          <div className="col">
+            <span>{formatDuration(playlistDataSong.duration)}</span>
+          </div>
+        </div>
+      )}
+    </div>
+
+    {playlistDataArtist && (
+              <div className="tracks">
+              {playlistDataArtist.songs.map((song, index) => (
+                <div key={song._id} className="row">
+                  <div className="col">{index + 1}</div>
+                  <div className="col">
+                    <div className="detail">
+                      <div className="info">
+                        <span>{song.title}</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="col">{song.albumTitle}</div>
+                  <div className="col">
+                    <span>{formatDuration(song.duration)}</span>
+                  </div>
+                </div>
+              ))}
+              </div>
+              )}
             </div>
           </div>
         </div>
