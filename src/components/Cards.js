@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import { fetchSongs } from "../services/api/songApi";
 import { fetchArtists } from "../services/api/artistApi";
 import { fetchAlbums } from "../services/api/albumApi";
-import CoverTemporaire from "../coverTemporaire/1703167485520.jpeg";
+import artistImage from "../assets/images/artist.png";
 
 const Cards = () => {
   const [songs, setSongs] = useState([]);
@@ -63,7 +63,7 @@ const Cards = () => {
       items: songs.slice(0, 10).map((song) => ({
         id: song._id,
         title: song.title,
-        image: song.albumTitle,  
+        image: song.albumCover,  
         artist: song.artistName,
       })),
     },
@@ -72,7 +72,7 @@ const Cards = () => {
       items: artists.slice(0, 10).map((artist) => ({
         id: artist._id,
         title: artist.name,
-        //image: artist.image, 
+        image: artist.image, 
       })),
     },
     {
@@ -97,7 +97,8 @@ const Cards = () => {
               <StyledLink to={`/playlists/${item.id}`} key={itemIndex}>
                 <Card>
                   <CardImg>
-                    <img src={CoverTemporaire} alt={item.title} />
+                  {console.log(item.image)}
+                    <img src={item.image != null ? `http://localhost:4000/${item.image}` : artistImage} alt={item.title} />
                     <Button className="card__play_button">
                       <BsFillPlayCircleFill size={60} color="green" />
                     </Button>
