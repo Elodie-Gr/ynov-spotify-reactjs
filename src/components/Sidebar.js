@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { MdHomeFilled, MdSearch } from "react-icons/md";
 import { IoLibrary } from "react-icons/io5";
 import { Link } from "react-router-dom";
+import { fetchAlbums } from "../services/api/albumApi";
 
 const Card = ({ title, image, description, showImageOnly }) => {
   return (
@@ -19,32 +20,34 @@ const Card = ({ title, image, description, showImageOnly }) => {
 // Composant Sidebar
 const Sidebar = () => {
   const [sidecarOpen, setSidecarOpen] = useState(true);
+  const [albums, setAlbums] = useState([]);
 
   const toggleSidecar = () => {
     setSidecarOpen(!sidecarOpen);
   };
 
-  // Données pour les cartes
+  useEffect(() => {
+    // Fetch album when the component mounts
+    const fetchDataAlbum = async () => {
+      try {
+        const albumsData = await fetchAlbums();
+        setAlbums(albumsData);
+        console.log(albumsData);
+      } catch (error) {
+        console.error('Error fetching albums:', error);
+      }
+    };
+
+    fetchDataAlbum();
+  }, []);
   const cardData = [
     {
-      title: "Carte 1",
-      image: "url-image-1",
-      description: "Description",
-    },
-    {
-      title: "Carte 2",
-      image: "url-image-2",
-      description: "Description",
-    },
-    {
-      title: "Carte 3",
-      image: "url-image-3",
-      description: "Description",
-    },
-    {
-      title: "Carte 4",
-      image: "url-image-4",
-      description: "Description",
+      items: albums.slice(0, 5).map((album) => ({
+        id: album._id,
+        title: album.title,
+        artist: album.artist.name,
+        image: album.albumCover,  
+      })),
     },
   ];
 
@@ -86,16 +89,22 @@ const Sidebar = () => {
 
       {/* section pour la liste de cartes */}
       <CardList>
-        {cardData.map((card, index) => (
-          <Card
-            key={index}
-            title={card.title}
-            image={card.image}
-            description={card.description}
-            showImageOnly={!sidecarOpen}
-          />
-        ))}
-      </CardList>
+  {cardData.map((section, index) => (
+    <div key={index}>
+      {section.items.map((item, itemIndex) => (
+           <StyledLink to={`/playlists/${item.id}`} key={itemIndex}>
+        <Card
+          key={itemIndex}
+          title={item.title}
+          image={`http://localhost:4000/${item.image}`}
+          description={item.artist}
+          showImageOnly={!sidecarOpen}
+        />
+        </StyledLink>
+      ))}
+    </div>
+  ))}
+</CardList>
     </Container>
   );
 };
@@ -109,6 +118,7 @@ const CardContainer = styled.div`
   margin: 5px; 
   border: 1px solid #333;
   padding: 5px;
+  height: 60px;
   img {
     width: ${({ showImageOnly }) => (showImageOnly ? "100%" : "30%")};
     height: auto;
@@ -119,7 +129,7 @@ const CardContainer = styled.div`
 
   div {
     flex: 1;
-    padding: 8px; /* Ajustez la marge intérieure selon vos préférences */
+    padding: 8px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -127,7 +137,7 @@ const CardContainer = styled.div`
 
   h3 {
     margin-top: 0;
-    margin-bottom: 2px; /* Ajustez l'espace entre le titre et la description */
+    margin-bottom: 2px;
     margin-left: ${({ showImageOnly }) => (showImageOnly ? "0" : "2px")};
     font-size: 12px;
   }
@@ -148,6 +158,8 @@ const Container = styled.div`
   flex-direction: column;
   height: 100%;
   width: ${({ sidecarOpen }) => (sidecarOpen ? "100%" : "60px")};
+  overflow-y: auto;
+  max-height: 100vh;
   .top__links {
     display: flex;
     flex-direction: column;
