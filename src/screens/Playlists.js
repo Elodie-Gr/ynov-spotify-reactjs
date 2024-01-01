@@ -53,10 +53,9 @@ const Playlists = () => {
     try {
       const playlistArtist = await fetchArtistById(playlistId);
       console.log("Fetched Artist Data:", playlistArtist);
-      setplaylistDataArtist(playlistArtist); // Utilisez setplaylistDataArtist au lieu de setArtist
+      setplaylistDataArtist(playlistArtist); 
       console.log(playlistArtist);
 
-      // Fetch song details and store in state
       const detailsPromises = playlistArtist.songs.map(async (songId) => {
         return await fetchSongDetails(songId);
       });
@@ -102,7 +101,7 @@ useEffect(() => {
                 {playlistDataSong && (
                   <>
                     <div className="image">
-                      <img src={playlistDataSong.albumCover} alt="selected playlist" />
+                      <img src={`http://localhost:4000/${playlistDataSong.albumCover}`} alt="selected playlist" />
                     </div>
                     <div className="details">
                       <span className="type">Playlist</span>
@@ -112,12 +111,12 @@ useEffect(() => {
                 )}
               </div>
   
-             {/* Section for les données de l'album */}
+             {/* Section pour les données de l'album */}
               <div className="playlist">
                 {playlistDataAlbum && (
                   <>
                     <div className="image">
-                      <img src={playlistDataAlbum.albumCover} alt="selected playlist" />
+                      <img src={`http://localhost:4000/${playlistDataAlbum.albumCover}`} alt="selected playlist" />
                     </div>
                     <div className="details">
                       <span className="type">Playlist</span>
@@ -189,11 +188,11 @@ useEffect(() => {
               <div className="detail">
                 <div className="info">
                 {song.title && <span>{song.title}</span>}
-                {song.artistName && <span>{song.artistName}</span>}
+                {song.artist.name && <span>{song.artist.name}</span>}
                 </div>
               </div>
             </div>
-            <div className="col">{song.albumTitle || 'N/A'}</div>
+            <div className="col">{song.album.title || 'N/A'}</div>
             <div className="col">
             {formatDuration(song.duration) && <span>{formatDuration(song.duration)}</span>}
             </div>
