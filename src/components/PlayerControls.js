@@ -13,9 +13,10 @@ import soundTwo from "../assets/audio/sound_two.mp3";
 import soundThree from "../assets/audio/sound_three.mp3";
 import Volume from "./Volume";
 
-const playlistData = [soundOne, soundTwo, soundThree];
+//const playlistData = [soundOne, soundTwo, soundThree];
 
-const PlayerControls = () => {
+const PlayerControls = ({ durationAudio, audioAudio }) => {
+  const playlistData = [audioAudio];
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
@@ -24,9 +25,10 @@ const PlayerControls = () => {
   const [shuffleMode, setShuffleMode] = useState(false);
   const [playList, setPlayList] = useState(playlistData);
   const [indexPlayList, setIndexPlayList] = useState(0);
+  console.log("duration " + durationAudio + " audioAudio " + audioAudio);
 
   useEffect(() => {
-    audioRef.current.pause();
+    //audioRef.current.pause();
 
     const intervalId = setInterval(() => {
       if (!audioRef.current) {
@@ -184,7 +186,7 @@ const PlayerControls = () => {
           <span>{formatTime(currentTime)}</span>
         </TimeDisplay>
         <ProgressBar
-          max={duration}
+          max={durationAudio ? durationAudio : 0}
           value={currentTime}
           onChange={(e) => {
             const time = parseInt(e.target.value, 10);
@@ -192,7 +194,7 @@ const PlayerControls = () => {
           }}
         />
         <TimeDisplay>
-          {formatTime(duration)}
+          {formatTime(durationAudio ? durationAudio : 0)}
         </TimeDisplay>
       </Bar>
       <div className="volume">
@@ -290,10 +292,10 @@ const TimeDisplay = styled.div`
   text-align: center;
 `;
 
-const formatTime = (seconds) => {
-  const minutes = Math.floor(seconds / 60);
-  const remainingSeconds = seconds % 60;
-  return `${String(minutes).padStart(2, "0")}:${String(remainingSeconds).padStart(2, "0")}`;
+const formatTime = (durationInSeconds) => {
+  const minutes = Math.floor(durationInSeconds / 60);
+    const seconds = Math.floor(durationInSeconds % 60);
+    return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
 };
 
 export default PlayerControls;

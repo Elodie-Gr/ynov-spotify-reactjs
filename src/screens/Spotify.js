@@ -9,10 +9,10 @@ import Body from "./Body";
 const Spotify = ({currentTrackInfo}) => {
   const defaultTrackInfo = {
     title: "",
-    artist: "",
+    durationAudio: "",
     cover: "",
   };
-  const { title, artist, cover } = currentTrackInfo || defaultTrackInfo;
+  const { title, durationAudio, cover } = currentTrackInfo || defaultTrackInfo;
   return (
     <Container>
       <div className="spotify__body">
@@ -25,7 +25,7 @@ const Spotify = ({currentTrackInfo}) => {
         </div>
       </div>
       <div className="spotify__footer">
-        <Footer currentTrackInfo={{ title, artist, cover }}/>
+        <Footer currentTrackInfo={{ title, cover, durationAudio }} />
       </div>
     </Container>
   );

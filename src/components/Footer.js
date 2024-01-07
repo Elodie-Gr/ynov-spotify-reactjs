@@ -12,7 +12,9 @@ const Footer = ({ currentTrackInfo }) => {
         //artist={currentTrackInfo.artist == null ? "" : currentTrackInfo.artist}
         cover={currentTrackInfo.cover == null ? "" : currentTrackInfo.cover}
       />
-      <PlayerControls />
+      <PlayerControls
+        durationAudio={currentTrackInfo.durationAudio == null ? "" : currentTrackInfo.durationAudio}
+        audioAudio={currentTrackInfo.audioAudio == null ? "" : currentTrackInfo.audioAudio}/>
     </Container>
   );
 };

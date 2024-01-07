@@ -4,7 +4,7 @@ import styled from "styled-components";
 const Track = ({ title, cover }) => {
   return (
     <Container>
-      <img src={cover} alt="Track Cover" />
+      <img src={cover} alt="" />
             <h4 className="track__info__track__name">{title}</h4>
             <h6 className="track__info__track__artists">
             </h6>

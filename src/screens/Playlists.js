@@ -13,7 +13,7 @@ import {
   BsFillPlayCircleFill,
   BsFillPauseCircleFill,
 } from "react-icons/bs";
-import Track from "../components/Track";
+import PlayerControls from "../components/PlayerControls";
 
 const Playlists = () => {
   const { playlistId } = useParams();
@@ -26,7 +26,9 @@ const Playlists = () => {
   const [currentTrackInfo, setCurrentTrackInfo] = useState({
     title: "",  
     //artist: "",  
-    cover: ""    
+    cover: "",
+    durationAudio: "",
+    audioAudio: ""   
   });
 
   const formatDuration = (durationInSeconds) => {
@@ -98,13 +100,17 @@ const Playlists = () => {
       // Chargez l'audio
       newAudio.load();
   
-      // Mettez à jour setCurrentTrackInfo avec les informations de la chanson actuelle
-      setCurrentTrackInfo({
-        title: song.title,
-        cover: `http://localhost:4000/${song.albumCover}`,
-        // Ajoutez d'autres propriétés comme l'artiste et l'album au besoin
-      });
+      
+
     }
+    console.log("duree" + song.duration);
+    // Mettez à jour setCurrentTrackInfo avec les informations de la chanson actuelle
+    setCurrentTrackInfo({
+      title: song.title,
+      cover: `http://localhost:4000/${song.albumCover}`,
+      durationAudio: song.duration,
+      audioAudio: `http://localhost:4000/${song.audio}`
+    });
   };
   
 
@@ -311,6 +317,7 @@ const Playlists = () => {
       </div>
       <div className="spotify__footer">
         <Footer currentTrackInfo={currentTrackInfo} />
+        <PlayerControls currentTrackInfo={currentTrackInfo} />
       </div>
     </Container>
   );
