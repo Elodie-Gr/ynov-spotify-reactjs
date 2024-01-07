@@ -203,7 +203,7 @@ const Playlists = () => {
                   <span>Titre</span>
                 </div>
                 <div className="col">
-                  <span>Album</span>
+                  <span></span>
                 </div>
                 <div className="col">
                   <span>
@@ -219,6 +219,11 @@ const Playlists = () => {
                   <div className="col">
                     <div className="detail">
                       <div className="info">
+                      <div className="playPause" onClick={() => playPauseSong(song.audio)}>
+                    {currentlyPlayingSong === song.audio
+                        ? <BsFillPauseCircleFill />
+                        : <BsFillPlayCircleFill />}
+                    </div>
                         <span>{song.title}</span>
                         <span>{song.artist.name}</span>
                       </div>
@@ -266,6 +271,11 @@ const Playlists = () => {
                   <div className="col">
                     <div className="detail">
                       <div className="info">
+                      <div className="playPause" onClick={() => playPauseSong(song.audio)}>
+                    {currentlyPlayingSong === song.audio
+                        ? <BsFillPauseCircleFill />
+                        : <BsFillPlayCircleFill />}
+                    </div>
                         <span>{song.title}</span>
                       </div>
                     </div>
@@ -350,7 +360,6 @@ const Container = styled.div`
       margin: 0 2rem;
       display: flex;
       flex-direction: column;
-      margin-bottom: 5rem;
       .row {
         padding: 0.5rem 1rem;
         display: grid;
