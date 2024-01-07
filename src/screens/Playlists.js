@@ -13,6 +13,7 @@ import {
   BsFillPlayCircleFill,
   BsFillPauseCircleFill,
 } from "react-icons/bs";
+import Track from "../components/Track";
 
 const Playlists = () => {
   const { playlistId } = useParams();
@@ -22,7 +23,12 @@ const Playlists = () => {
   const [playlistDataSong, setplaylistDataSong] = useState(null);
   const [currentlyPlayingSong, setCurrentlyPlayingSong] = useState(null);
   const [audio, setAudio] = useState(null);
-  
+  const [currentTrackInfo, setCurrentTrackInfo] = useState({
+    title: "",  
+    //artist: "",  
+    cover: ""    
+  });
+
   const formatDuration = (durationInSeconds) => {
     const minutes = Math.floor(durationInSeconds / 60);
     const seconds = Math.floor(durationInSeconds % 60);
@@ -37,13 +43,16 @@ const Playlists = () => {
           // If a song is playing, either pause or play the current song
           if (audio.paused || audio.src !== `http://localhost:4000/${currentlyPlayingSong}`) {
             audio.play();
+           
           } else {
             audio.pause();
+            
           }
         } else {
           // If no song is playing, play the current song
           audio.play();
           setCurrentlyPlayingSong(playlistDataSong.audio);
+          
         }
       }
     };
@@ -60,36 +69,44 @@ const Playlists = () => {
     };
   }, [audio, currentlyPlayingSong, playlistDataSong]);
 
-  const playPauseSong = (audioUrl) => {
+  const playPauseSong = (audioUrl, song) => {
     if (audio && audio.src === `http://localhost:4000/${audioUrl}`) {
-      // If the same song is selected, toggle play/pause
+      // Si la même chanson est sélectionnée, basculez entre lecture et pause
       if (audio.paused) {
         audio.play().catch((error) => console.error("Error playing audio:", error));
       } else {
         audio.pause();
       }
     } else {
-      // Cleanup previous Audio instance
+      // Nettoyez l'instance audio précédente
       if (audio) {
         audio.pause();
         audio.src = "";
         audio.load();
       }
-
-      // Create a new Audio instance
+  
+      // Créez une nouvelle instance Audio
       const newAudio = new Audio(`http://localhost:4000/${audioUrl}`);
       setAudio(newAudio);
       setCurrentlyPlayingSong(audioUrl);
-
-      // Event listener to ensure audio is loaded before playing
+  
+      // Ajoutez un écouteur d'événements pour vous assurer que l'audio est chargé avant la lecture
       newAudio.addEventListener('loadedmetadata', () => {
         newAudio.play().catch((error) => console.error("Error playing audio:", error));
       });
-
-      // Load the audio
+  
+      // Chargez l'audio
       newAudio.load();
+  
+      // Mettez à jour setCurrentTrackInfo avec les informations de la chanson actuelle
+      setCurrentTrackInfo({
+        title: song.title,
+        cover: `http://localhost:4000/${song.albumCover}`,
+        // Ajoutez d'autres propriétés comme l'artiste et l'album au besoin
+      });
     }
   };
+  
 
   useEffect(() => {
     const fetchData = async () => {
@@ -219,7 +236,7 @@ const Playlists = () => {
                   <div className="col">
                     <div className="detail">
                       <div className="info">
-                      <div className="playPause" onClick={() => playPauseSong(song.audio)}>
+                      <div className="playPause" onClick={() => playPauseSong(song.audio, song)}>
                     {currentlyPlayingSong === song.audio
                         ? <BsFillPauseCircleFill />
                         : <BsFillPlayCircleFill />}
@@ -245,7 +262,7 @@ const Playlists = () => {
           <div className="col">
             <div className="detail">
               <div className="info">
-                    <div className="playPause" onClick={() => playPauseSong(playlistDataSong.audio)}>
+                    <div className="playPause" onClick={() => playPauseSong(playlistDataSong.audio, playlistDataSong)}>
                     {currentlyPlayingSong === playlistDataSong.audio
                         ? <BsFillPauseCircleFill />
                         : <BsFillPlayCircleFill />}
@@ -271,7 +288,7 @@ const Playlists = () => {
                   <div className="col">
                     <div className="detail">
                       <div className="info">
-                      <div className="playPause" onClick={() => playPauseSong(song.audio)}>
+                      <div className="playPause" onClick={() => playPauseSong(song.audio, song)}>
                     {currentlyPlayingSong === song.audio
                         ? <BsFillPauseCircleFill />
                         : <BsFillPlayCircleFill />}
@@ -293,7 +310,7 @@ const Playlists = () => {
         </div>
       </div>
       <div className="spotify__footer">
-        <Footer />
+        <Footer currentTrackInfo={currentTrackInfo} />
       </div>
     </Container>
   );

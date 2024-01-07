@@ -5,7 +5,14 @@ import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
 import Body from "./Body";
 
-const Spotify = () => {
+
+const Spotify = ({currentTrackInfo}) => {
+  const defaultTrackInfo = {
+    title: "",
+    artist: "",
+    cover: "",
+  };
+  const { title, artist, cover } = currentTrackInfo || defaultTrackInfo;
   return (
     <Container>
       <div className="spotify__body">
@@ -18,7 +25,7 @@ const Spotify = () => {
         </div>
       </div>
       <div className="spotify__footer">
-        <Footer />
+        <Footer currentTrackInfo={{ title, artist, cover }}/>
       </div>
     </Container>
   );

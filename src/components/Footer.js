@@ -1,15 +1,17 @@
 import React, { useRef, useState } from "react";
 import styled from "styled-components";
 import CurrentTrack from "../components/Track";
-
 import PlayerControls from "../components/PlayerControls";
-import Volume from "../components/Volume";
 
-const Footer = () => {
+const Footer = ({ currentTrackInfo }) => {
 
   return (
     <Container>
-      <CurrentTrack />
+      <CurrentTrack
+        title={currentTrackInfo.title == null ? "" : currentTrackInfo.title}
+        //artist={currentTrackInfo.artist == null ? "" : currentTrackInfo.artist}
+        cover={currentTrackInfo.cover == null ? "" : currentTrackInfo.cover}
+      />
       <PlayerControls />
     </Container>
   );
