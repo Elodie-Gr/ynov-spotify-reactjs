@@ -9,6 +9,10 @@ import {fetchArtistById} from "../services/api/artistApi";
 import { useParams } from "react-router-dom";
 import { fetchSongById } from "../services/api/songApi";
 import artistImage from "../assets/images/artist.png";
+import {
+  BsFillPlayCircleFill,
+  BsFillPauseCircleFill,
+} from "react-icons/bs";
 
 const Playlists = () => {
   const { playlistId } = useParams();
@@ -16,12 +20,75 @@ const Playlists = () => {
   const [playlistDataAlbum, setplaylistDataAlbum] = useState(null);
   const [playlistDataArtist, setplaylistDataArtist] = useState(null);
   const [playlistDataSong, setplaylistDataSong] = useState(null);
-  const [songDetails, setSongDetails] = useState([]);
-
+  const [currentlyPlayingSong, setCurrentlyPlayingSong] = useState(null);
+  const [audio, setAudio] = useState(null);
+  
   const formatDuration = (durationInSeconds) => {
     const minutes = Math.floor(durationInSeconds / 60);
     const seconds = Math.floor(durationInSeconds % 60);
     return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+  };
+
+  useEffect(() => {
+    // Effect to handle play/pause logic
+    const handlePlayPause = () => {
+      if (audio) {
+        if (currentlyPlayingSong) {
+          // If a song is playing, either pause or play the current song
+          if (audio.paused || audio.src !== `http://localhost:4000/${currentlyPlayingSong}`) {
+            audio.play();
+          } else {
+            audio.pause();
+          }
+        } else {
+          // If no song is playing, play the current song
+          audio.play();
+          setCurrentlyPlayingSong(playlistDataSong.audio);
+        }
+      }
+    };
+
+    handlePlayPause();
+
+    // Cleanup function to handle the destruction of the previous Audio instance
+    return () => {
+      if (audio) {
+        audio.pause();
+        audio.src = "";
+        audio.load();
+      }
+    };
+  }, [audio, currentlyPlayingSong, playlistDataSong]);
+
+  const playPauseSong = (audioUrl) => {
+    if (audio && audio.src === `http://localhost:4000/${audioUrl}`) {
+      // If the same song is selected, toggle play/pause
+      if (audio.paused) {
+        audio.play().catch((error) => console.error("Error playing audio:", error));
+      } else {
+        audio.pause();
+      }
+    } else {
+      // Cleanup previous Audio instance
+      if (audio) {
+        audio.pause();
+        audio.src = "";
+        audio.load();
+      }
+
+      // Create a new Audio instance
+      const newAudio = new Audio(`http://localhost:4000/${audioUrl}`);
+      setAudio(newAudio);
+      setCurrentlyPlayingSong(audioUrl);
+
+      // Event listener to ensure audio is loaded before playing
+      newAudio.addEventListener('loadedmetadata', () => {
+        newAudio.play().catch((error) => console.error("Error playing audio:", error));
+      });
+
+      // Load the audio
+      newAudio.load();
+    }
   };
 
   useEffect(() => {
@@ -173,6 +240,11 @@ const Playlists = () => {
           <div className="col">
             <div className="detail">
               <div className="info">
+                    <div className="playPause" onClick={() => playPauseSong(playlistDataSong.audio)}>
+                    {currentlyPlayingSong === playlistDataSong.audio
+                        ? <BsFillPauseCircleFill />
+                        : <BsFillPlayCircleFill />}
+                    </div>
                 <span>{playlistDataSong.title}</span>
                 <span>{playlistDataSong.artist.name}</span>
               </div>
@@ -300,7 +372,10 @@ const Container = styled.div`
           gap: 1rem;
           .info {
             display: flex;
-            flex-direction: column;
+            flex-direction: row;
+          }
+          .playPause {
+            margin-right:10px;
           }
         }
       }
