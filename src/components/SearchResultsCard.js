@@ -53,6 +53,7 @@ const SearchResultsCard = ({ searchResults }) => {
 
   const cardData = [
     {
+      title: "Derniers sons",
       items: searchResults.songs && searchResults.songs.map((song) => ({
         id: song._id,
         title: song.title,
@@ -61,6 +62,7 @@ const SearchResultsCard = ({ searchResults }) => {
       })),
     },
     {
+      title: "Artistes",
       items: searchResults.artists && searchResults.artists.map((artist) => ({
         id: artist._id,
         title: artist.name,
@@ -68,6 +70,7 @@ const SearchResultsCard = ({ searchResults }) => {
       })),
     },
     {
+      title: "Albums",
       items: searchResults.albums && searchResults.albums.map((album) => ({
         id: album._id,
         title: album.title,
@@ -81,6 +84,7 @@ const SearchResultsCard = ({ searchResults }) => {
   return (
     <>
       {cardData.map((section, index) => (
+        section.items && section.items.length > 0 && (
         <CardsWrap key={index}>
           <h1>{section.title}</h1>
           <InlineCards>
@@ -102,12 +106,14 @@ const SearchResultsCard = ({ searchResults }) => {
             ))}
           </InlineCards>
         </CardsWrap>
+        )
       ))}
     </>
   );
 };
 
 export const CardsWrap = styled.div`
+  padding-bottom: 1.5rem;
   padding-left: 20px;
   h1 {
     color:white;

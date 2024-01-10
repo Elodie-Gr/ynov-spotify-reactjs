@@ -83,7 +83,7 @@ const handleChange = (e) => {
       </div>
     </Container> 
     {/* Afficher les résultats pour chaque type (songs, artists, albums) */}
-       <SearchResultsCard searchResults={searchResults} />
+    {searchQuery &&<SearchResultsCard searchResults={searchResults} />}
        </>
   );
 };
