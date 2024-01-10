@@ -7,13 +7,12 @@ import { fetchArtists } from "../services/api/artistApi";
 import { fetchAlbums } from "../services/api/albumApi";
 import artistImage from "../assets/images/artist.png";
 
-const Cards = () => {
+const SearchResultsCard = ({ searchResults }) => {
   const [songs, setSongs] = useState([]);
   const [albums, setAlbums] = useState([]);
   const [artists, setArtists] = useState([]);
 
   useEffect(() => {
-    // Fetch songs when the component mounts
     const fetchData = async () => {
       try {
         const songsData = await fetchSongs();
@@ -27,7 +26,6 @@ const Cards = () => {
   }, []);
 
   useEffect(() => {
-    // Fetch artist when the component mounts
     const fetchDataArtist = async () => {
       try {
         const artistsData = await fetchArtists();
@@ -41,7 +39,6 @@ const Cards = () => {
   }, []);
 
   useEffect(() => {
-    // Fetch album when the component mounts
     const fetchDataAlbum = async () => {
       try {
         const albumsData = await fetchAlbums();
@@ -56,29 +53,26 @@ const Cards = () => {
 
   const cardData = [
     {
-      title: "Derniers sons",
-      items: songs.slice(0, 10).map((song) => ({
+      items: searchResults.songs && searchResults.songs.map((song) => ({
         id: song._id,
         title: song.title,
-        image: song.albumCover,  
+        image: song.albumCover,
         artist: song.artistName,
       })),
     },
     {
-      title: "Artistes",
-      items: artists.slice(0, 10).map((artist) => ({
+      items: searchResults.artists && searchResults.artists.map((artist) => ({
         id: artist._id,
         title: artist.name,
-        image: artist.image, 
+        image: artist.image,
       })),
     },
     {
-      title: "Albums",
-      items: albums.slice(0, 10).map((album) => ({
+      items: searchResults.albums && searchResults.albums.map((album) => ({
         id: album._id,
         title: album.title,
-        artist: album.artist.name,
-        image: album.albumCover,  
+        artist: album.artist && album.artist.name,
+        image: album.albumCover,
       })),
     },
   ];
@@ -90,7 +84,7 @@ const Cards = () => {
         <CardsWrap key={index}>
           <h1>{section.title}</h1>
           <InlineCards>
-            {section.items.map((item, itemIndex) => (
+            {section.items && section.items.map((item, itemIndex) => (
               <StyledLink to={`/playlists/${item.id}`} key={itemIndex}>
                 <Card>
                   <CardImg>
@@ -99,7 +93,6 @@ const Cards = () => {
                       <BsFillPlayCircleFill size={60} color="green" />
                     </Button>
                   </CardImg>
-
                   <CardContent>
                     <h3>{item.title}</h3>
                     {item.artist && <span>{item.artist}</span>}
@@ -115,7 +108,6 @@ const Cards = () => {
 };
 
 export const CardsWrap = styled.div`
-  padding-bottom: 1.5rem;
   padding-left: 20px;
   h1 {
     color:white;
@@ -225,4 +217,4 @@ const StyledLink = styled(Link)`
   color: white;
 `;
 
-export default Cards;
+export default SearchResultsCard;

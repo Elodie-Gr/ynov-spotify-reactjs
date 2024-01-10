@@ -4,6 +4,7 @@ import { CgProfile } from "react-icons/cg";
 import { IoIosArrowDropleftCircle, IoIosArrowDroprightCircle } from "react-icons/io";
 import { FaSearch } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import SearchResultsCard from "./SearchResultsCard";
 
 const Navbar = () => {
 
@@ -24,27 +25,46 @@ const Navbar = () => {
   };
 
   const handleSearch = async () => {
-    try {
-       const songsResponse = await fetch(`http://localhost:5001/api/v1/song/${searchQuery}`);
-      const artistsResponse = await fetch(`http://localhost:5001/api/v1/artist/${searchQuery}`);
-      const albumsResponse = await fetch(`http://localhost:5001/api/v1/album/${searchQuery}`);
+  try {
+    const songsResponse = await fetch(`http://localhost:4000/api/v1/song`);
+    const artistsResponse = await fetch(`http://localhost:4000/api/v1/artist`);
+    const albumsResponse = await fetch(`http://localhost:4000/api/v1/album`);
 
-      const songsData = await songsResponse.json();
-      const artistsData = await artistsResponse.json();
-      const albumsData = await albumsResponse.json();
+    const [songsData, artistsData, albumsData] = await Promise.all([
+      songsResponse.json(),
+      artistsResponse.json(),
+      albumsResponse.json(),
+    ]);
 
-      setSearchResults({
-        songs: songsData,
-        artists: artistsData,
-        albums: albumsData,
-      });
-    } catch (error) {
-      console.error("Error fetching search results:", error);
-    }
-  };
-  
+    // Filtrer les résultats en fonction de la searchQuery
+    const filteredSongs = songsData.filter((song) =>
+      song.title.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+
+    const filteredArtists = artistsData.filter((artist) =>
+      artist.name.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+
+    const filteredAlbums = albumsData.filter((album) =>
+      album.title.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+
+    setSearchResults({
+      songs: filteredSongs,
+      artists: filteredArtists,
+      albums: filteredAlbums,
+    });
+  } catch (error) {
+    console.error("Error fetching search results:", error);
+  }
+};
+const handleChange = (e) => {
+  setSearchQuery(e.target.value);
+  handleSearch(); // Déclencher la recherche à chaque changement de la valeur
+};
 
   return (
+    <>
     <Container>
       <div className="arrow">
         <IoIosArrowDropleftCircle size={40} onClick={navigateToPreviousPage} />
@@ -53,10 +73,7 @@ const Navbar = () => {
       <div className="search__bar">      
         <FaSearch onClick={handleSearch} />
         <input type="text" placeholder="Que souhaitez-vous écouter ?" value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)} />
-            {searchResults.songs.map((result) => (
-          <div key={result.id}>{result.name}</div>
-        ))}
+          onChange={handleChange} />
       </div>
       <div className="avatar">
         <a>
@@ -64,7 +81,10 @@ const Navbar = () => {
           <span>SpoWish</span>
         </a>
       </div>
-    </Container>
+    </Container> 
+    {/* Afficher les résultats pour chaque type (songs, artists, albums) */}
+       <SearchResultsCard searchResults={searchResults} />
+       </>
   );
 };
 

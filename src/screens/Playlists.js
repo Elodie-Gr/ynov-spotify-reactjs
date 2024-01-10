@@ -103,7 +103,6 @@ const Playlists = () => {
       
 
     }
-    console.log("duree" + song.duration);
     // Mettez à jour setCurrentTrackInfo avec les informations de la chanson actuelle
     setCurrentTrackInfo({
       title: song.title,

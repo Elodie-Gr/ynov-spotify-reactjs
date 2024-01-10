@@ -25,7 +25,6 @@ const PlayerControls = ({ durationAudio, audioAudio }) => {
   const [shuffleMode, setShuffleMode] = useState(false);
   const [playList, setPlayList] = useState(playlistData);
   const [indexPlayList, setIndexPlayList] = useState(0);
-  console.log("duration " + durationAudio + " audioAudio " + audioAudio);
 
   useEffect(() => {
     //audioRef.current.pause();
