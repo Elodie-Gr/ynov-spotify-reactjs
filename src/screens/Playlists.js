@@ -14,15 +14,21 @@ import {
   BsFillPauseCircleFill,
 } from "react-icons/bs";
 import PlayerControls from "../components/PlayerControls";
+import io from "socket.io-client";
+
+
 
 const Playlists = () => {
+ 
   const { playlistId } = useParams();
-  console.log("Playlist ID:", playlistId);
+  //console.log("Playlist ID:", playlistId);
   const [playlistDataAlbum, setplaylistDataAlbum] = useState(null);
   const [playlistDataArtist, setplaylistDataArtist] = useState(null);
   const [playlistDataSong, setplaylistDataSong] = useState(null);
   const [currentlyPlayingSong, setCurrentlyPlayingSong] = useState(null);
   const [audio, setAudio] = useState(null);
+  const [socket, setSocket] = useState(null);
+  const [isPlaying, setIsPlaying] = useState(false);
   const [currentTrackInfo, setCurrentTrackInfo] = useState({
     title: "",  
     //artist: "",  
@@ -38,23 +44,48 @@ const Playlists = () => {
   };
 
   useEffect(() => {
+    // Initialize socket connection
+    const newSocket = io("http://localhost:3001");
+    setSocket(newSocket);
+
+    // Cleanup function to disconnect socket on component unmount
+    return () => {
+      if (newSocket) {
+        newSocket.disconnect();
+      }
+    };
+  }, []);
+
+  useEffect(() => {
+
     // Effect to handle play/pause logic
     const handlePlayPause = () => {
-      if (audio) {
+      if (audio && socket) {
         if (currentlyPlayingSong) {
           // If a song is playing, either pause or play the current song
           if (audio.paused || audio.src !== `http://localhost:4000/${currentlyPlayingSong}`) {
             audio.play();
-           
+            console.log(`Playback toggled on ${socket.id}`);
+            socket.emit("togglePlayback", true);
+            socket.on("togglePlayback", (isPlaying) => {
+              console.log("Lecture activée/désactivée sur", socket.id, "En cours :", isPlaying);
+            });
           } else {
             audio.pause();
-            
+            console.log(`Playback toggled on ${socket.id}`);
+            socket.emit("togglePlayback", false);
+            socket.on("togglePlayback", (isPlaying) => {
+              console.log("Lecture activée/désactivée sur", socket.id, "En cours :", isPlaying);
+            });
           }
         } else {
           // If no song is playing, play the current song
           audio.play();
           setCurrentlyPlayingSong(playlistDataSong.audio);
-          
+          socket.emit("togglePlayback", true);
+          socket.on("togglePlayback", (isPlaying) => {
+            console.log("Lecture activée/désactivée sur", socket.id, "En cours :", isPlaying);
+          });
         }
       }
     };
@@ -69,41 +100,64 @@ const Playlists = () => {
         audio.load();
       }
     };
-  }, [audio, currentlyPlayingSong, playlistDataSong]);
+  }, [audio, currentlyPlayingSong, playlistDataSong,socket]);
+
+  useEffect(() => {
+    if (socket) {
+      socket.on("togglePlayback", (isPlaying) => {
+        console.log("Lecture activée/désactivée sur", socket.id, "En cours :", isPlaying);
+        setIsPlaying(isPlaying);
+      });
+    }
+  
+    // Cleanup function to remove the event listener
+    return () => {
+      if (socket) {
+        socket.off("togglePlayback");
+      }
+    };
+  }, [socket]);
 
   const playPauseSong = (audioUrl, song) => {
+    console.log("playPauseSong - audioUrl:", audioUrl);
+  
+    if (socket) {
+      setIsPlaying((prevIsPlaying) => {
+        const newIsPlaying = !prevIsPlaying;
+        socket.emit('togglePlayback', newIsPlaying);
+        return newIsPlaying;
+      });
+    }
+  
     if (audio && audio.src === `http://localhost:4000/${audioUrl}`) {
-      // Si la même chanson est sélectionnée, basculez entre lecture et pause
+      console.log("Audio already loaded");
       if (audio.paused) {
+        console.log("Playing audio");
         audio.play().catch((error) => console.error("Error playing audio:", error));
       } else {
+        console.log("Pausing audio");
         audio.pause();
       }
     } else {
-      // Nettoyez l'instance audio précédente
-      if (audio) {
+      if (audio && audio.src) {
+        console.log("Existing audio instance found. Pausing.");
         audio.pause();
-        audio.src = "";
-        audio.load();
+        audio.currentTime = 0; // Reset current time to the beginning
+      } else {
+        console.log("Creating a new audio instance");
+        const newAudio = new Audio(`http://localhost:4000/${audioUrl}`);
+        setAudio(newAudio);
+        setCurrentlyPlayingSong(audioUrl);
+  
+        newAudio.addEventListener('loadedmetadata', () => {
+          console.log("Audio loaded. Playing.");
+          newAudio.play().catch((error) => console.error("Error playing audio:", error));
+        });
+  
+        newAudio.load();
       }
-  
-      // Créez une nouvelle instance Audio
-      const newAudio = new Audio(`http://localhost:4000/${audioUrl}`);
-      setAudio(newAudio);
-      setCurrentlyPlayingSong(audioUrl);
-  
-      // Ajoutez un écouteur d'événements pour vous assurer que l'audio est chargé avant la lecture
-      newAudio.addEventListener('loadedmetadata', () => {
-        newAudio.play().catch((error) => console.error("Error playing audio:", error));
-      });
-  
-      // Chargez l'audio
-      newAudio.load();
-  
-      
-
     }
-    // Mettez à jour setCurrentTrackInfo avec les informations de la chanson actuelle
+  
     setCurrentTrackInfo({
       title: song.title,
       cover: `http://localhost:4000/${song.albumCover}`,
@@ -111,6 +165,8 @@ const Playlists = () => {
       audioAudio: `http://localhost:4000/${song.audio}`
     });
   };
+  
+  
   
 
   useEffect(() => {
@@ -157,7 +213,6 @@ const Playlists = () => {
 
     fetchDataArtist();
   }, [playlistId]);
-
 
 
   if (!playlistDataAlbum && !playlistDataArtist &&!playlistDataSong) {
@@ -242,7 +297,7 @@ const Playlists = () => {
                     <div className="detail">
                       <div className="info">
                       <div className="playPause" onClick={() => playPauseSong(song.audio, song)}>
-                    {currentlyPlayingSong === song.audio
+                    {currentlyPlayingSong === song.audio || isPlaying
                         ? <BsFillPauseCircleFill />
                         : <BsFillPlayCircleFill />}
                     </div>
@@ -268,7 +323,7 @@ const Playlists = () => {
             <div className="detail">
               <div className="info">
                     <div className="playPause" onClick={() => playPauseSong(playlistDataSong.audio, playlistDataSong)}>
-                    {currentlyPlayingSong === playlistDataSong.audio
+                    {currentlyPlayingSong === playlistDataSong.audio || isPlaying
                         ? <BsFillPauseCircleFill />
                         : <BsFillPlayCircleFill />}
                     </div>
@@ -294,7 +349,7 @@ const Playlists = () => {
                     <div className="detail">
                       <div className="info">
                       <div className="playPause" onClick={() => playPauseSong(song.audio, song)}>
-                    {currentlyPlayingSong === song.audio
+                    {currentlyPlayingSong === song.audio || isPlaying
                         ? <BsFillPauseCircleFill />
                         : <BsFillPlayCircleFill />}
                     </div>
