@@ -92,7 +92,6 @@ const Playlists = () => {
 
     handlePlayPause();
 
-    // Cleanup function to handle the destruction of the previous Audio instance
     return () => {
       if (audio) {
         audio.pause();
@@ -109,17 +108,22 @@ const Playlists = () => {
         setIsPlaying(isPlaying);
       });
     }
-  
-    // Cleanup function to remove the event listener
+
+    if (socket) {
+      socket.on("currentTrackInfoUpdated", (trackInfo) => {
+        setCurrentTrackInfo(trackInfo);
+      });
+    }
+    
     return () => {
       if (socket) {
         socket.off("togglePlayback");
+        socket.off("currentTrackInfoUpdated");
       }
     };
   }, [socket]);
 
   const playPauseSong = (audioUrl, song) => {
-    console.log("playPauseSong - audioUrl:", audioUrl);
   
     if (socket) {
       setIsPlaying((prevIsPlaying) => {
@@ -130,7 +134,6 @@ const Playlists = () => {
     }
   
     if (audio && audio.src === `http://localhost:4000/${audioUrl}`) {
-      console.log("Audio already loaded");
       if (audio.paused) {
         console.log("Playing audio");
         audio.play().catch((error) => console.error("Error playing audio:", error));
@@ -142,8 +145,12 @@ const Playlists = () => {
       if (audio && audio.src) {
         console.log("Existing audio instance found. Pausing.");
         audio.pause();
-        audio.currentTime = 0; // Reset current time to the beginning
+        audio.currentTime = 0; 
+        audio.src = `http://localhost:4000/${audioUrl}`; // Charge la nouvelle URL
+        audio.load(); // Charge la nouvelle source
+        audio.play().catch((error) => console.error("Error playing audio:", error)); 
       } else {
+        
         console.log("Creating a new audio instance");
         const newAudio = new Audio(`http://localhost:4000/${audioUrl}`);
         setAudio(newAudio);
@@ -164,11 +171,18 @@ const Playlists = () => {
       durationAudio: song.duration,
       audioAudio: `http://localhost:4000/${song.audio}`
     });
+
+    if (socket) {
+      socket.emit("updateCurrentTrackInfo", {
+        title: song.title,
+        cover: `http://localhost:4000/${song.albumCover}`,
+        durationAudio: song.duration,
+        audioAudio: `http://localhost:4000/${song.audio}`
+      });
+    }
+
   };
   
-  
-  
-
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -297,7 +311,7 @@ const Playlists = () => {
                     <div className="detail">
                       <div className="info">
                       <div className="playPause" onClick={() => playPauseSong(song.audio, song)}>
-                    {currentlyPlayingSong === song.audio || isPlaying
+                    {isPlaying
                         ? <BsFillPauseCircleFill />
                         : <BsFillPlayCircleFill />}
                     </div>
@@ -323,7 +337,7 @@ const Playlists = () => {
             <div className="detail">
               <div className="info">
                     <div className="playPause" onClick={() => playPauseSong(playlistDataSong.audio, playlistDataSong)}>
-                    {currentlyPlayingSong === playlistDataSong.audio || isPlaying
+                    { isPlaying
                         ? <BsFillPauseCircleFill />
                         : <BsFillPlayCircleFill />}
                     </div>
@@ -349,7 +363,7 @@ const Playlists = () => {
                     <div className="detail">
                       <div className="info">
                       <div className="playPause" onClick={() => playPauseSong(song.audio, song)}>
-                    {currentlyPlayingSong === song.audio || isPlaying
+                    {isPlaying
                         ? <BsFillPauseCircleFill />
                         : <BsFillPlayCircleFill />}
                     </div>
