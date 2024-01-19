@@ -13,10 +13,10 @@ import soundTwo from "../assets/audio/sound_two.mp3";
 import soundThree from "../assets/audio/sound_three.mp3";
 import Volume from "./Volume";
 
-//const playlistData = [soundOne, soundTwo, soundThree];
+const playlistData = [soundOne, soundTwo, soundThree];
 
 const PlayerControls = ({ durationAudio, audioAudio }) => {
-  const playlistData = [audioAudio];
+  //const playlistData = [audioAudio];
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
