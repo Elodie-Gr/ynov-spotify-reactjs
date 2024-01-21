@@ -8,6 +8,7 @@ Front : https://github.com/Elodie-Gr/ynov-spotify-reactjs.git
 Back : https://github.com/FairouzBF/spotify-server-api.git
 
 Prod - BackOffice : https://dev-cloud-backoffice-spotify.vercel.app/login
+Prod - Front : https://spotify-reactjs-seven.vercel.app
 
 Liens Vidéo :
 Backoffice demo : https://youtu.be/fRn7uAfJmy8
